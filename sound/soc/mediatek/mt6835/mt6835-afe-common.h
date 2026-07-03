@@ -15,16 +15,40 @@
 #include "mt6835-reg.h"
 #include "../common/mtk-base-afe.h"
 
+#if IS_ENABLED(CONFIG_OPLUS_FEATURE_MM_FEEDBACK)
+#include "../feedback/oplus_audio_kernel_fb.h"
+#endif
+
 #define SKIP_SB
 
 #if IS_ENABLED(CONFIG_MTK_AEE_FEATURE)
+#if IS_ENABLED(CONFIG_OPLUS_FEATURE_MM_FEEDBACK)
+#define AUDIO_AEE(message) \
+	do { \
+		ratelimited_fb_fatal("payload@@AUDIO_AEE:"message); \
+		(aee_kernel_exception_api(__FILE__, \
+					  __LINE__, \
+					  DB_OPT_FTRACE, message, \
+					  "audio assert")); \
+	} while (0)
+#else /* CONFIG_OPLUS_FEATURE_MM_FEEDBACK */
 #define AUDIO_AEE(message) \
 	(aee_kernel_exception_api(__FILE__, \
 				  __LINE__, \
 				  DB_OPT_FTRACE, message, \
 				  "audio assert"))
+#endif /*CONFIG_OPLUS_FEATURE_MM_FEEDBACK*/
 #else
+#if IS_ENABLED(CONFIG_OPLUS_FEATURE_MM_FEEDBACK)
+#define AUDIO_AEE(message) \
+	do { \
+		ratelimited_fb_fatal("payload@@AUDIO_AEE:"message); \
+		WARN_ON(true); \
+	} while (0)
+#else /* CONFIG_OPLUS_FEATURE_MM_FEEDBACK */
 #define AUDIO_AEE(message) WARN_ON(true)
+#endif /*CONFIG_OPLUS_FEATURE_MM_FEEDBACK*/
+
 #endif
 
 enum {
@@ -107,7 +131,7 @@ enum {
 #define MT6835_VOIP_MEMIF MT6835_MEMIF_DL12
 #define MT6835_MMAP_DL_MEMIF MT6835_MEMIF_DL5
 #define MT6835_MMAP_UL_MEMIF MT6835_MEMIF_VUL5
-#define MT6835_BARGE_IN_MEMIF MT6835_MEMIF_AWB
+#define MT6835_BARGE_IN_MEMIF MT6835_MEMIF_VUL7
 
 // adsp define
 #define MT6835_DSP_PRIMARY_MEMIF MT6835_MEMIF_DL1

@@ -1,0 +1,93 @@
+/* Copyright (c) 2018, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&pio {
+	sia91xx_gpio_R: sia91xx_gpio_R {
+		pins_cmd_dat {
+			pinmux = <PINMUX_GPIO170__FUNC_GPIO170>;
+                        slew-rate = <1>;
+                        bias-disable;
+		};
+	};
+};
+
+&odm {
+	sia91xx_R: sia91xx@R {
+		compatible = "si,sia91xx_v3";
+		si,si_pa_type = "sia917x";
+		si,si_pa_reset = <&pio 170 0>;
+		pinctrl-names = "si_pa_gpio";
+		pinctrl-0 = <&sia91xx_gpio_R>;
+		si,si_pa_disable_pin = <0>;
+		sipa_min_range = <5000>;
+		sipa_max_range = <9000>;
+		sipa_f0_min_range = <400>;
+		sipa_f0_max_range = <800>;
+		// 2: 2 spk, 0: mean no spk need f0 cali
+		oplus_need_f0_cali = <0>;
+		channel_num = <0>;
+	};
+};
+
+&i2c7 {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        clock-frequency = <400000>;
+
+	sipa_i2c_R: sipa_i2c@6d{
+		compatible = "si,sia91xx-i2c_v3";
+		#sound-dai-cells = <0>;
+		reg = <0x6d>;
+		si,sipa-dev = <&sia91xx_R>;
+                sound-name-prefix = "SpkrRight";
+		status = "okay";
+	};
+};
+
+&audio_extend {
+	//for sia speaker
+	compatible = "oplus,asoc-audio";
+	oplus,speaker-vendor = "sipa";
+	oplus,speaker-i2s-id = <3>;
+	oplus,speaker-i2s-id-in = <0>;
+	oplus,speaker-codec-name = "sipa_i2c.7-006d";
+	oplus,speaker-codec-dai-name = "sia91xx-aif-7-6d";
+	oplus,spk-i2s-index = <3 0>;
+	status = "okay";
+};
+
+&snd_scp_audio {
+	compatible = "mediatek,snd_scp_audio";
+	/* feature : enable set 0x5 for smart pa set “SCP_SMART_PA_FEATURE_ID”  true */
+	scp-spk-process-enable = <0x5 0x4 0x10 0x15>;
+	status = "okay";
+};
+
+&sound {
+        si,sia81xx-max-num = <1>;
+        si,sia81xx-aux-devs = <&sia91xx_R>;
+	si,is_digital_pa = <1>;
+	si,is_sia91xx_v3_1 = <1>;
+	mediatek,speaker-codec {
+		sound-dai = <&sipa_i2c_R>;
+	};
+};
+
+&accdet{
+        eint_use_ext_res = <1>;
+        headset-eint-trig-mode = <2>;
+        headset-three-key-threshold = <0 80 170 306>;
+};
+
+&speech_usip_mem{
+	adsp-phone-call-enh-enable = <0x5>;
+};

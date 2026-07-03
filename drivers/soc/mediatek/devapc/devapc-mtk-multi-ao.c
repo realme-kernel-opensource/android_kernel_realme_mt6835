@@ -930,9 +930,12 @@ static void devapc_extra_handler(int slave_type, const char *vio_master,
 
 	/* Severity level */
 	if (dbg_stat->enable_KE && (ret_cb != DEVAPC_NOT_KE)) {
-		pr_info(PFX "Device APC Violation Issue/%s", dispatch_key);
-		BUG_ON(id != INFRA_SUBSYS_CONN && id != INFRA_SUBSYS_PCIE);
-
+		if (!strncasecmp(vio_master, "ADSPSYS_M1_M", 12)) {
+			WARN(1, "Device APC Violation Issue/%s", dispatch_key);
+		} else {
+                        pr_info(PFX "Device APC Violation Issue/%s", dispatch_key);
+                        BUG_ON(id != INFRA_SUBSYS_CONN && id != INFRA_SUBSYS_PCIE);
+		}
 	} else if (dbg_stat->enable_AEE) {
 		/* call mtk aee_kernel_exception */
 #if IS_ENABLED(CONFIG_MTK_AEE_FEATURE)
@@ -1054,6 +1057,10 @@ static irqreturn_t devapc_violation_irq(int irq_number, void *dev_id)
 		irq_type_num = mtk_devapc_ctx->soc->irq_type_num;
 
 	for (irq_type = 0; irq_type < irq_type_num; irq_type++) {
+		if (irq_type == 4) {
+			pr_info(PFX "Skip irq_type 4\n");
+			continue;
+		}
 		if (irq_number == mtk_devapc_ctx->devapc_irq[irq_type]) {
 			pr_info(PFX "irq_type: %d\n", irq_type);
 			mtk_devapc_ctx->current_irq_type = irq_type;
@@ -1785,6 +1792,10 @@ int mtk_devapc_probe(struct platform_device *pdev,
 	}
 
 	for (irq_type = 0; irq_type < irq_type_num; irq_type++) {
+		if (irq_type == 4) {
+			pr_info(PFX "Skip irq_type 4\n");
+			continue;
+		}
 		ret = devm_request_irq(&pdev->dev,
 			mtk_devapc_ctx->devapc_irq[irq_type],
 			(irq_handler_t)devapc_violation_irq,
