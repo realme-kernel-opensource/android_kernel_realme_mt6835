@@ -246,7 +246,7 @@ static enum IMGSENSOR_RETURN wl2866d_hw_set(
     } else if (is_project(25610) || is_project(25676) || is_project(25685) || is_project(25686) ||
         is_project(25618) || is_project(25619) || is_project(25720) || is_project(25721) ||
         is_project(25722) || is_project(25730) || is_project(25731) || is_project(25745) ||
-        is_project(25746)) {
+        is_project(25746) || is_project(26600) || is_project(26845) || is_project(26885) || is_project(26881)) {
         for(i = 0; i < (sizeof(ldolist_mumbai) / sizeof(ldolist_mumbai[0])); i++) {
             if(sensor_idx == ldolist_mumbai[i].sensor_index && pin == ldolist_mumbai[i].seq_type) {
                ldonum = ldolist_mumbai[i].ldo_selected;

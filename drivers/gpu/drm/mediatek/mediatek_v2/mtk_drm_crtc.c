@@ -11032,7 +11032,8 @@ void mtk_crtc_config_round_corner(struct drm_crtc *crtc,
 
 //	cfg.w = crtc->mode.hdisplay;
 //	cfg.h = crtc->mode.vdisplay;
-	if (!strcmp(panel_name, "ac312_p_3_a0025_dsi_vdo") || !strcmp(panel_name, "panel_ae211_p_3_a0027_dsi_vdo")) {
+	if (!strcmp(panel_name, "ac312_p_3_a0025_dsi_vdo") || !strcmp(panel_name, "panel_ae211_p_3_a0027_dsi_vdo")
+        || !strcmp(panel_name, "oplus25155_ac388_p_7_a0025_dsi_vdo")) {
 		if (cfg.h == 2372) {
 			cfg.h = 2376;
 		}

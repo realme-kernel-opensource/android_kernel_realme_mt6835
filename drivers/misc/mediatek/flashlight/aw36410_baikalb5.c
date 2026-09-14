@@ -555,6 +555,9 @@ static int aw36410_baikalb5_flash_open(void)
 
 static int aw36410_baikalb5_flash_release(void)
 {
+	aw36410_baikalb5_flash_data->led_mode = FLASH_LED_MODE_NONE;
+	aw36410_baikalb5_mode_ctrl(aw36410_baikalb5_flash_data);
+	aw36410_baikalb5_enable_ctrl(aw36410_baikalb5_flash_data, 0, false);
 	return 0;
 }
 

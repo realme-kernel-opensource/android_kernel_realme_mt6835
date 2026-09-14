@@ -366,6 +366,7 @@
 					OPLUS_IC_FUNC_CP_SET_UCP_DISABLE
 					OPLUS_IC_FUNC_CP_GET_IIN_MAX
 					OPLUS_IC_FUNC_CP_WATCHDOG_RESET
+					OPLUS_IC_FUNC_CP_SET_SSTIMEOUT_UCP_ENABLE
 				>;
 				virqs = <
 					OPLUS_IC_VIRQ_ERR
@@ -612,6 +613,9 @@
 		oplus,gauge_ic = <&oplus_virtual_gauge>;
 		oplus,voocphy_ic = <&oplus_virtual_vphy>;
 		oplus,topic-update-interval = <10000>;
+		oplus,fcl_support;
+		oplus,fcl_index = <1>;
+		oplus,vb_offset = <0>;
 
 		oplus_virtual_gauge: oplus,virtual_gauge {
 			compatible = "oplus,virtual_gauge";
@@ -621,6 +625,9 @@
 			oplus,batt_capacity_mah = <7000>;
 			oplus,ic_type = <OPLUS_CHG_IC_VIRTUAL_GAUGE>;
 			oplus,ic_index = <0>;
+			oplus,fcl_support;
+			oplus,fcl_index = <1>;
+			oplus,vb_offset = <0>;
 		};
 	};
 };
@@ -886,6 +893,10 @@
 	};
 };
 
+&mt6375_chg {
+	support_icl_optimization;
+};
+
 &lk_charger {
 	support_tuv_authentication;
 	charger_no_wiress;
@@ -907,11 +918,18 @@
 	ta_ac_charger_current = <1500000>;
 	pd_charger_current = <500000>;
 	support_quickboot_charge;
+	support_icl_optimization;
+	support_chg_time_cnt;
+	support_chg_time_r;
+	support_chg_track_r;
+	chg_time_uvlo = <2700>;
+	chg_time_vmax = <4400>;
 
 	oplus,battery_compatible_config_num = <1>;
 	oplus,battery_compatible_config = <790 1040 0>;
 	oplus,battery_compatible_by_auxadc = <5>;
 	oplus,battery_compatible_names = "45w";
+	real_death_battery_check;
 };
 
 &i2c3 {

@@ -839,7 +839,7 @@ static int mumbai_i2c_probe(struct i2c_client *client, const struct i2c_device_i
 
 	curProject = is_project(25610) || is_project(25676) || is_project(25686) || is_project(25685) || is_project(25618) ||
 	is_project(25619) || is_project(25720) || is_project(25721) || is_project(25722) || is_project(25730) ||
-	is_project(25731) || is_project(25745) || is_project(25746);
+	is_project(25731) || is_project(25745) || is_project(25746) || is_project(26600) || is_project(26845) || is_project(26885);
 
         if (!curProject) {
             err = -ENODEV;

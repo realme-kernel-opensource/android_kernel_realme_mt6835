@@ -1,6 +1,6 @@
-&rt1715_typec {
-	rt1715_typec_2: rt1715_2 {
-		compatible = "richtek,rt1715";
+&cps8851_typec {
+	cps8851_typec_2: rt1715_2 {
+		compatible = "cps,cps8851h";
 		reg = <0x4e>;
 		status = "okay";
 		rt-tcpc,name = "type_c_port0"; /* tcpc_device's name */
@@ -9,27 +9,27 @@
 		rt-tcpc,rp_level = <0>; /* 0: Default, 1: 1.5, 2: 3.0 */
 		//rt-tcpc,vconn_supply = <1>;  /* 0: Never, 1: Always, */
 					     /* 2: EMarkOnly, 3: StartOnly */
-		rt1711pd,intr_gpio = <&pio 12 0x0>;
-		rt1711pd,intr_gpio_num = <12>;
+		cps8851pd,intr_gpio = <&pio 12 0x0>;
+		cps8851pd,intr_gpio_num = <12>;
 		rt,disable_irq_reset;
 		/* charger = <&mt6375_chg>; */
 		charger = <&sy6974b>;
 		pd-data {
-			pd,vid = <0x29cf>;
-			pd,pid = <0x1711>;
-			pd,source-cap-ext = /bits/ 8 <0xcf 0x29 0x11 0x17
+			pd,vid = <0x315C>;
+			pd,pid = <0x8851>;
+			pd,source-cap-ext = /bits/ 8 <0x5C 0x31 0x51 0x88
 						      0x00 0x00 0x00 0x00
 						      0x00 0x00 0x00 0x00
 						      0x00 0x00 0x00 0x00
 						      0x00 0x00 0x00 0x00
 						      0x00 0x00 0x01 0x02
 						      0x00>;
-			pd,sink-cap-ext = /bits/ 8 <0xcf 0x29 0x11 0x17
-					0x00 0x00 0x00 0x00
-					0x01 0x00 0x00 0x00
-					0x00 0x00 0x00 0x00
-					0x01 0x00 0x00 0x00
-					0x00 0x00 0x00 0x00>;
+			pd,sink-cap-ext = /bits/ 8 <0x5C 0x31 0x51 0x88
+							0x00 0x00 0x00 0x00
+							0x01 0x00 0x00 0x00
+							0x00 0x00 0x00 0x00
+							0x01 0x00 0x00 0x00
+							0x00 0x00 0x00 0x00>;
 			pd,mfrs = "RichtekTCPC";
 
 			/*
@@ -69,15 +69,15 @@
 			 */
 
 			pd,id-vdo-size = <6>;
-			pd,id-vdo-data = <0xd14029cf 0x0 0x17110000
+			pd,id-vdo-data = <0xd140315c 0x0 0x88510000
 					  0x61000000 0x0 0x41000000>;
 
 			bat,nr = <1>;
 			pd,country_nr = <0>;
 
 			bat-info0 {
-				bat,vid = <0x29cf>;
-				bat,pid = <0x1711>;
+				bat,vid = <0x315C>;
+				bat,pid = <0x8851>;
 				bat,mfrs = "bat1";
 				bat,design_cap = <3000>;
 			};
@@ -102,7 +102,7 @@
 			//};
 		};
 		dpm_caps {
-			local_dr_power;
+			//local_dr_power;
 			local_dr_data;
 			//local_ext_power;
 			local_usb_comm;
@@ -119,9 +119,9 @@
 			attempt_discover_svid;
 
 			/* 0: disable, 1: prefer_snk, 2: prefer_src */
-			pr_check = <0>;
+			pr_check = <1>;
 			//pr_reject_as_source;
-			//pr_reject_as_sink;
+			pr_reject_as_sink;
 			//pr_check_gp_source;
 			//pr_check_gp_sink;
 

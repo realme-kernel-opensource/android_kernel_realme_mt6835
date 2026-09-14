@@ -2188,8 +2188,9 @@ static kal_uint32 set_test_pattern_mode(kal_bool enable)
 
 static kal_uint32 streaming_control(kal_bool enable)
 {
+    kal_uint8 stream_status;
     kal_uint8 mipi_status;
-    kal_uint8 cnt = 105;
+    kal_uint8 cnt = 150;
     pr_info("streaming_enable(0=Sw tandby,1=streaming): %d\n", enable);
     if (enable)
     {
@@ -2199,14 +2200,16 @@ static kal_uint32 streaming_control(kal_bool enable)
     } else {
         write_cmos_sensor(0x0500, 0x00);
         do {
-            mipi_status = read_cmos_sensor(0x0624);
-            if ((mipi_status & 0x01) == 0x01) {
-                pr_info("mipi_status: 0x%02x, cnt = %d\n", mipi_status, cnt);
-                break;
-            } else {
-                msleep(1);
-                cnt--;
+            stream_status = read_cmos_sensor(0x0551);
+            if (stream_status == 0x00) {
+                mipi_status = read_cmos_sensor(0x0624);
+                if ((mipi_status & 0x01) == 0x01) {
+                    pr_info("stream_status: 0x%02x,mipi_status: 0x%02x, cnt = %d\n", stream_status, mipi_status, cnt);
+                    break;
+                }
             }
+            msleep(1);
+            cnt--;
         } while(cnt);
         write_cmos_sensor(0x062d, 0x00);
     }

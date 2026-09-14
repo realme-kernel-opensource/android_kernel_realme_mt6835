@@ -768,6 +768,7 @@
 		oplus_spec,wired-ffc-fcc-cutoff-ma = <1710 1710 1300 1610 1610 900>;
 
 		/*If use subboard NTC as battery temp, config it as 20, otherwise 0 */
+		oplus_spec,batt_full_time = <300>;
 		oplus_spec,tbatt_power_off_cali_temp = <0>;
 		oplus_spec,poweroff_high_batt_temp = <720>;
 		oplus_spec,poweroff_emergency_batt_temp = <770>;

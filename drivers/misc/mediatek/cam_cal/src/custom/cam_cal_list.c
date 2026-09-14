@@ -97,6 +97,9 @@ struct stCAM_CAL_LIST_STRUCT g_camCalList[] = {
 	/*MUMBAI-F*/
 	{GC50F6_SENSOR_ID_MUMBAIF, 0xA0, Common_read_region, MAX_EEPROM_SIZE_8K},
 	{SC800CS_SENSOR_ID_MUMBAIF, 0x20, sc800cs_read_region,MAX_EEPROM_SIZE_16K},
+	/*MUMBAI-K*/
+	{GC50F6_SENSOR_ID_MUMBAIK, 0xA0, Common_read_region, MAX_EEPROM_SIZE_8K},
+	{SC800CS_SENSOR_ID_MUMBAIK, 0x20, sc800cs_read_region,MAX_EEPROM_SIZE_16K},
 	/*MUMBAI-D*/
 	{GC50F6_SENSOR_ID_MUMBAID, 0xA0, Common_read_region, MAX_EEPROM_SIZE_8K},
 	{MT510_SENSOR_ID_MUMBAID, 0x50, mt510d_read_region, MAX_EEPROM_SIZE_8K}, /* Note: mt510d_read_region should check client pointer internally */

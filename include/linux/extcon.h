@@ -12,7 +12,6 @@
  *
  * based on switch class driver
  * Copyright (C) 2008 Google, Inc.
- * Author: Mike Lockwood <lockwood@android.com>
  */
 
 #ifndef __LINUX_EXTCON_H__

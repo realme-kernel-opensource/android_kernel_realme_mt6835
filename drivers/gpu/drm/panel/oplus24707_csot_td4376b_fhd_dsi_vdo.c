@@ -60,6 +60,9 @@ extern int get_boot_mode(void);
 #include "oplus24707_csot_td4376b_fhd_dsi_vdo.h"
 #include "../bias/oplus23661_aw37501_bias.h"
 #include <linux/reboot.h>
+#ifdef OPLUS_FEATURE_DISPLAY_ONSCREENFINGERPRINT
+#include "../oplus/oplus_display_onscreenfingerprint.h"
+#endif /* OPLUS_FEATURE_DISPLAY_ONSCREENFINGERPRINT */
 
 extern unsigned int oplus_display_brightness;
 extern unsigned int oplus_max_normal_brightness;
@@ -1536,6 +1539,9 @@ static int jdi_probe(struct mipi_dsi_device *dsi)
 	unsigned int lcm_degree;
 	int ret;
 	int probe_ret;
+#ifdef OPLUS_FEATURE_DISPLAY_ONSCREENFINGERPRINT
+	unsigned int fp_type = 0x01;
+#endif /* OPLUS_FEATURE_DISPLAY_ONSCREENFINGERPRINT */
 
 	pr_info("%s+ jdi_probe enter csot,td4376b,vdo,120hz\n", __func__);
 
@@ -1639,6 +1645,9 @@ static int jdi_probe(struct mipi_dsi_device *dsi)
 	register_reboot_notifier(&ctx->lcd_vsn_reset_nb);
 
 	oplus_max_normal_brightness = MAX_NORMAL_BRIGHTNESS;
+#ifdef OPLUS_FEATURE_DISPLAY_ONSCREENFINGERPRINT
+	oplus_ofp_set_fp_type(&fp_type);
+#endif /* OPLUS_FEATURE_DISPLAY_ONSCREENFINGERPRINT */
 	return ret;
 }
 

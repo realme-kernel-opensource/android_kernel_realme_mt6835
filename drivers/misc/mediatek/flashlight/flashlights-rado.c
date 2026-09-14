@@ -300,7 +300,7 @@ static int rado_disable(int channel)
         return -1;
     }
 
-    if (rado_flash_mode == 4 && rado_charge_enable == 1) {
+    if (rado_charge_enable == 1) {
         oplus_chg_set_camera_on(0);
         rado_charge_enable = 0;
     } else if (rado_flash_mode == 3 && rado_charge_mode == 1 && rado_charge_enable == 0) {

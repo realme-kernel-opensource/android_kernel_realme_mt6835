@@ -837,6 +837,7 @@
 		oplus,default_protocol_list = <CHG_PROTOCOL_VOOC
 							CHG_PROTOCOL_PPS
 							CHG_PROTOCOL_PD>;
+		oplus,protocol_wait_list = <CHG_PROTOCOL_VOOC 1000>;
 	};
 
 	oplus_virtual_cp: oplus,virtual_cp {
@@ -887,6 +888,7 @@
 	ta_ac_charger_current = <1500000>;
 	pd_charger_current = <500000>;
 	support_quickboot_charge;
+	real_death_battery_check;
 };
 
 &i2c3 {

@@ -73,9 +73,18 @@
 };
 
 &oplus_ext_gauge {
-		graphite_BLPE15{
-			support_external_gauge;
-		};
+	graphite_BLPE15{
+		support_external_gauge;
+
+		qcom,modify-soc-smooth;
+		qcom,modify-soc-calibration;
+		oplus,batt_nfg8011b;
+		oplus,calib_info_save_support;
+		oplus,support_extern_cmd;
+		oplus,batt_num = <1>;
+		oplus,ic_type = <OPLUS_CHG_IC_GAUGE>;
+		oplus,ic_index = <0>;
+	};
 };
 
 &mt6375_gauge {
@@ -90,14 +99,14 @@
 
 		oplus_spec,vbatt_pdqc_to_5v_thr = <4490>;
 		oplus_spec,vbatt_pdqc_to_9v_thr = <4500>;
-		oplus_spec,pd-iclmax-ma = <1500>;
+		oplus_spec,pd-iclmax-ma = <3000>;
 		oplus_spec,qc-iclmax-ma = <1500>;
 		oplus_spec,non-standard-ibatmax-ma = <500>;
 		oplus_spec,input-power-mw = <
 			2500		/* OPLUS_WIRED_CHG_MODE_UNKNOWN */
 			2500		/* OPLUS_WIRED_CHG_MODE_SDP */
 			7500		/* OPLUS_WIRED_CHG_MODE_CDP */
-			10000		/* OPLUS_WIRED_CHG_MODE_DCP */
+			15000		/* OPLUS_WIRED_CHG_MODE_DCP */
 			15000		/* OPLUS_WIRED_CHG_MODE_VOOC */
 			13500		/* OPLUS_WIRED_CHG_MODE_QC */
 			13500		/* OPLUS_WIRED_CHG_MODE_PD */
@@ -107,7 +116,7 @@
 			0 1024  2200 2200 2200 2200 2200 2200 0	/* OPLUS_WIRED_CHG_MODE_UNKNOWN */
 			0 600   600  600  600  600  600  600  0 /* OPLUS_WIRED_CHG_MODE_SDP */
 			0 967   1600 1600 1600 1600 1600 1600 0	/* OPLUS_WIRED_CHG_MODE_CDP */
-			0 967   2200 2200 2200 2200 2200 2200 0	/* OPLUS_WIRED_CHG_MODE_DCP */
+			0 1024  3069 3300 3300 3300 3300 3300 0	/* OPLUS_WIRED_CHG_MODE_DCP */
 			0 967   2200 2200 2200 2200 2200 2200 0	/* OPLUS_WIRED_CHG_MODE_VOOC */
 			0 967   2902 3300 3300 3300 3300 3300 0	/* OPLUS_WIRED_CHG_MODE_QC */
 			0 967   2902 3300 3300 3300 3300 3300 0	/* OPLUS_WIRED_CHG_MODE_PD */
@@ -116,7 +125,7 @@
 			0 1024  2200 2200 2200 2200 2200 2200 0	/* OPLUS_WIRED_CHG_MODE_UNKNOWN */
 			0 600   600  600  600  600  600  500  0	/* OPLUS_WIRED_CHG_MODE_SDP */
 			0 967   1600 1600 1600 1600 1600 1000 0	/* OPLUS_WIRED_CHG_MODE_CDP */
-			0 967   1612 2200 2200 2200 2200 1000 0	/* OPLUS_WIRED_CHG_MODE_DCP */
+			0 1024  1705 3300 3300 3300 3300 1000 0	/* OPLUS_WIRED_CHG_MODE_DCP */
 			0 967   1612 2200 2200 2200 2200 1000 0	/* OPLUS_WIRED_CHG_MODE_VOOC */
 			0 967   1612 3300 3300 3300 3300 1000 0	/* OPLUS_WIRED_CHG_MODE_QC */
 			0 967   1612 3300 3300 3300 3300 1000 0	/* OPLUS_WIRED_CHG_MODE_PD */

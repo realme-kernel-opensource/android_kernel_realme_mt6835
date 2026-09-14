@@ -335,6 +335,7 @@
 					OPLUS_IC_FUNC_CP_SET_UCP_DISABLE
 					OPLUS_IC_FUNC_CP_GET_IIN_MAX
 					OPLUS_IC_FUNC_CP_WATCHDOG_RESET
+					OPLUS_IC_FUNC_CP_SET_SSTIMEOUT_UCP_ENABLE
 				>;
 				virqs = <
 					OPLUS_IC_VIRQ_ERR
@@ -581,6 +582,9 @@
 		oplus,gauge_ic = <&oplus_virtual_gauge>;
 		oplus,voocphy_ic = <&oplus_virtual_vphy>;
 		oplus,topic-update-interval = <10000>;
+		oplus,fcl_support;
+		oplus,fcl_index = <0>;
+		oplus,vb_offset = <20>;
 
 		oplus_virtual_gauge: oplus,virtual_gauge {
 			compatible = "oplus,virtual_gauge";
@@ -590,6 +594,9 @@
 			oplus,batt_capacity_mah = <6550>;
 			oplus,ic_type = <OPLUS_CHG_IC_VIRTUAL_GAUGE>;
 			oplus,ic_index = <0>;
+			oplus,fcl_support;
+			oplus,fcl_index = <0>;
+			oplus,vb_offset = <20>;
 		};
 	};
 };
@@ -847,14 +854,18 @@
 	};
 };
 
+&mt6375_chg {
+	support_icl_optimization;
+};
+
 &lk_charger {
 	support_tuv_authentication;
 	charger_no_wiress;
 	led_brightness = <102>;
 	sdp_screenon_voltage = <3000>;
 	//sub_board_temp_support;
-	support_external_gauge_bq27z561;
-	bq27z561_i2c_id = <0x09>;
+	support_external_gauge_bq27z541;
+	bq27z541_i2c_id = <0x09>;
 	support_sdp_screenoff;
 	support_sdp_backlight;
 	support_4p48_single_battery;
@@ -870,6 +881,13 @@
 	ta_ac_charger_current = <1500000>;
 	pd_charger_current = <500000>;
 	support_quickboot_charge;
+	support_icl_optimization;
+	support_chg_time_cnt;
+	single_batt_external_gauge_support;
+	support_chg_time_r;
+	support_chg_track_r;
+	chg_time_uvlo = <2700>;
+	chg_time_vmax = <4400>;
 };
 
 &i2c3 {

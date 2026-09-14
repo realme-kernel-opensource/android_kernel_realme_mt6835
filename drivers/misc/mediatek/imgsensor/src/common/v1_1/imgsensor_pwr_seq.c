@@ -1037,7 +1037,7 @@ struct IMGSENSOR_HW_POWER_SEQ sensor_power_sequence[] = {
             {AVDD1_GPIO, Vol_High, 2},
             {SensorMCLK, Vol_High, 0},
             {AVDD, Vol_2800, 9},
-            {RST, Vol_High, 1}
+            {RST, Vol_High, 9}
         },
     },
 #endif
@@ -1273,6 +1273,33 @@ struct IMGSENSOR_HW_POWER_SEQ sensor_power_sequence[] = {
 #if defined(SC800CS_MIPI_RAW_MUMBAIF)
     {
         SENSOR_DRVNAME_SC800CS_MIPI_RAW_MUMBAIF,
+        {
+            {RST, Vol_Low, 0},
+            {DOVDD, Vol_1800, 5},
+            {DVDD, Vol_1200, 4},
+            {AVDD, Vol_2800, 2},
+            {RST, Vol_High, 5},
+            {SensorMCLK, Vol_High, 5},
+        },
+    },
+#endif
+#if defined(GC50F6_MIPI_RAW_MUMBAIK)
+    {
+        SENSOR_DRVNAME_GC50F6_MIPI_RAW_MUMBAIK,
+        {
+            {RST, Vol_Low, 1},
+            {DOVDD, Vol_1800, 3},
+            {AVDD, Vol_2800, 1},
+            {DVDD, Vol_1100, 1},
+            {AFVDD, Vol_2800, 1},
+            {SensorMCLK, Vol_High, 2},
+            {RST, Vol_High, 5},
+        },
+    },
+#endif
+#if defined(SC800CS_MIPI_RAW_MUMBAIK)
+    {
+        SENSOR_DRVNAME_SC800CS_MIPI_RAW_MUMBAIK,
         {
             {RST, Vol_Low, 0},
             {DOVDD, Vol_1800, 5},

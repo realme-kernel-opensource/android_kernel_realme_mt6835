@@ -259,6 +259,11 @@
 	qcom,warm_vfloat_over_sw_limit = <4140>;
 	qcom,non_standard_vfloat_over_sw_limit = <3990>;
 
+	oplus,full_limit_curr_support;
+	oplus,fcl_index = <1>;
+	oplus,vb_offset = <0>;
+	oplus_spec,dec-vol-fv-mv = <40>;
+
 	qcom,vbatt_power_off = <3300>;
 	qcom,vbatt_soc_1 = <3410>;
 	qcom,vooc_project = <21>;
@@ -373,6 +378,8 @@
 	high-temp-scheme;
 	over_high_temp_thr = <60>;
 	is_support_sc6607;
+	support_chg_time_cnt;
+	support_icl_optimization;
 
 	max_charger_voltage = <15000000>;
 	boot_battery_voltage = <3400000>;

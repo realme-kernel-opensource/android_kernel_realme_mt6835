@@ -47,6 +47,9 @@
 #define MUMBAIH_DTNAME      "mediatek,flashlights_mumbaih"
 #define MUMBAIH_DTNAME_I2C  "mediatek,strobe_main"
 
+#define MUMBAICD_DTNAME      "mediatek,flashlights_mumbaicd"
+#define MUMBAICD_DTNAME_I2C  "mediatek,strobe_main"
+
 #define ALPHALF_DTNAME    "mediatek,flashlights_alphal5"
 #define ALPHALF_DTNAME_I2C "mediatek,strobe_main"
 

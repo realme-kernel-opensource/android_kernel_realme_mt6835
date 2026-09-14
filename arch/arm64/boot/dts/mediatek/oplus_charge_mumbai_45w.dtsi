@@ -170,6 +170,7 @@
 					OPLUS_IC_FUNC_BUCK_HARDWARE_INIT
 					OPLUS_IC_FUNC_BUCK_KICK_WDT
 					OPLUS_IC_FUNC_GET_OTG_ENABLE
+					OPLUS_IC_FUNC_SET_USB_DISCHG_ENABLE
 				>;
 				virqs = <
 					OPLUS_IC_VIRQ_ERR
@@ -543,6 +544,7 @@
 
 		/* support for V2.0 usbtemp protect. */
 		oplus,support_usbtemp_protect_v2;
+		oplus,support_usbtemp_discharge_protect;
 		oplus_spec,usbtemp_batt_temp_low = <50>;
 		oplus_spec,usbtemp_batt_temp_high = <50>;
 		oplus_spec,usbtemp_batt_temp_over_hot = <60>;
@@ -579,14 +581,10 @@
 			oplus,ic_index = <0>;
 
 			oplus,ccdetect-gpio = <&pio 18 0x00>;
-			oplus,dischg-gpio = <&pio 34 0x00>;/*VBUS_SHORT*/
 
-			pinctrl-names = "dischg_enable", "dischg_disable",
-						"ccdetect_active", "ccdetect_sleep";
-			pinctrl-0 = <&dischg_enable>;
-			pinctrl-1 = <&dischg_disable>;
-			pinctrl-2 = <&ccdetect_active>;
-			pinctrl-3 = <&ccdetect_sleep>;
+			pinctrl-names = "ccdetect_active", "ccdetect_sleep";
+			pinctrl-0 = <&ccdetect_active>;
+			pinctrl-1 = <&ccdetect_sleep>;
 
 			io-channels = <&auxadc 4>, <&auxadc 3>;
 			io-channel-names = "usb_temp_adc_l", "usb_temp_adc_r";
@@ -856,6 +854,7 @@
 		oplus,default_protocol_list = <CHG_PROTOCOL_VOOC
 					       CHG_PROTOCOL_PPS
 					       CHG_PROTOCOL_PD>;
+		oplus,protocol_wait_list = <CHG_PROTOCOL_VOOC 1000>;
 	};
 
 	oplus_virtual_cp: oplus,virtual_cp {
@@ -1358,10 +1357,9 @@
 
 		//dpdm-supply = <&usb2_phy0>;
 
-		normal-init-work-delay-ms = <8000>;
-		other-init-work-delay-ms = <8000>;
+		normal-init-work-delay-ms = <9500>;
+		other-init-work-delay-ms = <9500>;
 
-		oplus,cp_ic = <&oplus_virtual_cp>;
 		oplus,ic_type = <OPLUS_CHG_IC_BUCK>;
 		oplus,ic_index = <0>;
 		qcom,batfet_reset_disable;

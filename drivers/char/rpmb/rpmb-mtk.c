@@ -1584,6 +1584,8 @@ int emmc_rpmb_req_handle(struct mmc_card *card, struct emmc_rpmb_req *rpmb_req)
 	int ret;
 	struct emmc_rpmb_data *rpmb;
 	struct list_head *pos;
+	struct mmc_host *mmc = card->host;
+        struct msdc_host *host = mmc_priv(mmc);
 
 	part_md = vzalloc(sizeof(struct emmc_rpmb_blk_data));
 	if (!part_md)
@@ -1601,6 +1603,7 @@ int emmc_rpmb_req_handle(struct mmc_card *card, struct emmc_rpmb_req *rpmb_req)
 	/*  MSG(INFO, "%s start.\n", __func__); */
 
 	mmc_get_card(card, NULL);
+	down(&host->rpmb_sem);
 
 	/*
 	 * STEP1: Switch to RPMB partition.
@@ -1631,6 +1634,8 @@ error:
 
 		mmc_hw_reset(card->host);
 	}
+
+        up(&host->rpmb_sem);
 
 	mmc_put_card(card, NULL);
 

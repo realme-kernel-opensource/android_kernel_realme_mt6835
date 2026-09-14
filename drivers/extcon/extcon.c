@@ -11,7 +11,6 @@
  *
  * based on android/drivers/switch/switch_class.c
  * Copyright (C) 2008 Google, Inc.
- * Author: Mike Lockwood <lockwood@android.com>
  */
 
 #include <linux/module.h>

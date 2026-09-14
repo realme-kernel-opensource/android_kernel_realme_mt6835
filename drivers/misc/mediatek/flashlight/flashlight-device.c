@@ -185,6 +185,11 @@ const struct flashlight_device_id flashlight_id_mumbaih[] = {
 	{0, 0, 0, "flashlights_mumbaih", 1, 0},
 };
 
+const struct flashlight_device_id flashlight_id_mumbaicd[] = {
+	/* {TYPE, CT, PART, "NAME", CHANNEL, DECOUPLE} */
+	{0, 0, 0, "flashlights_mumbaicd", 0, 1},
+};
+
 #endif //OPLUS_FEATURE_CAMERA_COMMON
 
 

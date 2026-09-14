@@ -191,20 +191,20 @@ static void jdi_panel_init(struct jdi *ctx)
 	jdi_dcs_write_seq_static(ctx, 0xD6, 0x00);
 	jdi_dcs_write_seq_static(ctx, 0xB8, 0x6f, 0x53, 0x00, 0xbe, 0x00, 0x00);
 	jdi_dcs_write_seq_static(ctx, 0xB9, 0x81, 0x53, 0x00, 0xbe, 0x00, 0x00);
-	jdi_dcs_write_seq_static(ctx, 0xBA, 0x01, 0x53, 0x00, 0xbe, 0x00, 0x00);
-        jdi_dcs_write_seq_static(ctx, 0xC0, 0x00, 0x33, 0x00, 0x1B, 0x06, 0x22, 0x00, 0x00, 0x0A);
+	jdi_dcs_write_seq_static(ctx, 0xBA, 0x01, 0x51, 0x00, 0xbe, 0x00, 0x00);
+        jdi_dcs_write_seq_static(ctx, 0xC0, 0x00, 0x33, 0x00, 0x1A, 0x06, 0x22, 0x00, 0x00, 0x0A);
         jdi_dcs_write_seq_static(ctx, 0xC1, 0x30, 0x41);
         jdi_dcs_write_seq_static(ctx, 0xB6, 0x30, 0x73, 0x00, 0x86, 0xC3, 0x0b, 0xFF, 0xFF);
-	jdi_dcs_write_seq_static(ctx, 0xCE, 0x47, 0x01, 0x2e, 0x7c, 0xcb, 0xcb, 0xcb, 0xcb, 0xcb, 0xcb, 0xcb, 0xcb, 0xcb, 0xcb, 0xcb,
-		0xcb, 0xcb, 0xcb, 0x00, 0xa7, 0x14, 0x14, 0x00, 0xb0, 0xb0, 0x49, 0x43, 0x69, 0x5a, 0x74);
+	jdi_dcs_write_seq_static(ctx, 0xCE, 0x57, 0x01, 0x12, 0x1a, 0x22, 0x2e, 0x44, 0x62, 0x6d, 0x74, 0x8e, 0x9b, 0xac, 0xb0, 0xbf,
+		0xc4, 0xc8, 0xca, 0x00, 0xa7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x09, 0x43, 0x69, 0x5a, 0x74);
         jdi_dcs_write_seq_static(ctx, 0xEB, 0x0F, 0x00, 0xF0);
         jdi_dcs_write_seq_static(ctx, 0xEC, 0x60, 0x02);
         jdi_dcs_write_seq_static(ctx, 0xED, 0x00, 0x00, 0xF0);
 	jdi_dcs_write_seq_static(ctx, 0xCF, 0x02);
 	jdi_dcs_write_seq_static(ctx, 0x35, 0x00);
 	jdi_dcs_write_seq_static(ctx, 0x51, 0x00, 0x00);
-	jdi_dcs_write_seq_static(ctx, 0x53, 0x24);
-	jdi_dcs_write_seq_static(ctx, 0x36, 0x10);
+	jdi_dcs_write_seq_static(ctx, 0x53, 0x2C);
+	jdi_dcs_write_seq_static(ctx, 0xF0, 0xC2, 0x6A, 0x01);
 	jdi_dcs_write_seq_static(ctx, 0x55, 0x33);
 	jdi_dcs_write_seq_static(ctx, 0xB0, 0x83);
 	jdi_dcs_write_seq_static(ctx, 0x11);
@@ -219,7 +219,9 @@ static void jdi_panel_init(struct jdi *ctx)
 
 static void cabc_mode_retore(struct jdi *ctx)
 {
-	jdi_dcs_write_seq_static(ctx, 0x36, 0x00);
+	jdi_dcs_write_seq_static(ctx, 0xB0, 0x80);
+	jdi_dcs_write_seq_static(ctx, 0xF0, 0xC2, 0x6A, 0x00);
+	jdi_dcs_write_seq_static(ctx, 0xB0, 0x83);
 
 	if (!cabc_sun_flag && (cabc_mode_backup != cabc_true_mode)) {
 		pr_info("%s()  cabc_sun_flag = %d, cabc_true_mode =%d !\n",	__func__, cabc_sun_flag, cabc_true_mode);
@@ -531,7 +533,7 @@ static struct mtk_panel_params ext_params_60hz = {
                                 .dfps_cmd_table[2] = {0, 4 , {0xF0, 0xEB, 0x01, 0x00}},
                                 .dfps_cmd_table[3] = {0, 4 , {0xF0, 0xEB, 0x02, 0xF0}},
                                 .dfps_cmd_table[4] = {0, 4 , {0xF0, 0xED, 0x02, 0xF0}},
-                                .dfps_cmd_table[5] = {0, 2 , {0xB0, 0x03}},
+                                .dfps_cmd_table[5] = {0, 2 , {0xB0, 0x83}},
                 },
                 .dyn = {
                                 .switch_en = 1,
@@ -596,7 +598,7 @@ static struct mtk_panel_params ext_params_90hz = {
                                 .dfps_cmd_table[2] = {0, 4 , {0xF0, 0xEB, 0x01, 0x00}},
                                 .dfps_cmd_table[3] = {0, 4 , {0xF0, 0xEB, 0x02, 0xF0}},
                                 .dfps_cmd_table[4] = {0, 4 , {0xF0, 0xED, 0x02, 0xF0}},
-                                .dfps_cmd_table[5] = {0, 2 , {0xB0, 0x03}},
+                                .dfps_cmd_table[5] = {0, 2 , {0xB0, 0x83}},
                 },
                 .dyn = {
                                 .switch_en = 1,
@@ -661,7 +663,7 @@ static struct mtk_panel_params ext_params_120hz = {
                                 .dfps_cmd_table[2] = {0, 4 , {0xF0, 0xEB, 0x01, 0x00}},
                                 .dfps_cmd_table[3] = {0, 4 , {0xF0, 0xEB, 0x02, 0xF0}},
                                 .dfps_cmd_table[4] = {0, 4 , {0xF0, 0xED, 0x02, 0xF0}},
-                                .dfps_cmd_table[5] = {0, 2 , {0xB0, 0x03}},
+                                .dfps_cmd_table[5] = {0, 2 , {0xB0, 0x83}},
                 },
                 .dyn = {
                                 .switch_en = 1,
@@ -726,7 +728,7 @@ static struct mtk_panel_params ext_params_45hz = {
                         .dfps_cmd_table[2] = {0, 4 , {0xF0, 0xEB, 0x01, 0x00}},
                         .dfps_cmd_table[3] = {0, 4 , {0xF0, 0xEB, 0x02, 0xF0}},
                         .dfps_cmd_table[4] = {0, 4 , {0xF0, 0xED, 0x02, 0xF0}},
-                        .dfps_cmd_table[5] = {0, 2 , {0xB0, 0x03}},
+                        .dfps_cmd_table[5] = {0, 2 , {0xB0, 0x83}},
         },
         .dyn = {
                         .switch_en = 1,
@@ -788,10 +790,10 @@ static struct mtk_panel_params ext_params_144hz = {
                         .vact_timing_fps = 144,
                         .dfps_cmd_table[0] = {0, 2 , {0xB0, 0x80}},
                         .dfps_cmd_table[1] = {0, 4 , {0xF0, 0xEB, 0x00, 0x07}},
-                        .dfps_cmd_table[2] = {0, 4 , {0xF0, 0xEB, 0x01, 0xC0}},
-                        .dfps_cmd_table[3] = {0, 4 , {0xF0, 0xEB, 0x02, 0x7C}},
-                        .dfps_cmd_table[4] = {0, 4 , {0xF0, 0xED, 0x02, 0x7c}},
-                        .dfps_cmd_table[5] = {0, 2 , {0xB0, 0x03}},
+                        .dfps_cmd_table[2] = {0, 4 , {0xF0, 0xEB, 0x01, 0x90}},
+                        .dfps_cmd_table[3] = {0, 4 , {0xF0, 0xEB, 0x02, 0x79}},
+                        .dfps_cmd_table[4] = {0, 4 , {0xF0, 0xED, 0x02, 0x79}},
+                        .dfps_cmd_table[5] = {0, 2 , {0xB0, 0x83}},
         },
         .dyn = {
                         .switch_en = 1,
@@ -848,9 +850,12 @@ static int boe_setbacklight_cmdq(void *dsi, dcs_write_gce cb, void *handle,
 				 unsigned int level)
 {
 	char bl_tb0[] = {0x51, 0x0F, 0xFF};
-	char bl_tb1[] = {0x36, 0x00};
+	char bl_tb1[] = {0xF0, 0xC2, 0x6A, 0x00};
+        char bl_tb2[] = {0x53, 0x00};
 	char bl_tb3[] = {0x29};
-	char bl_tb4[] = {0x36, 0x10};
+	char bl_tb4[] = {0xF0, 0xC2, 0x6A, 0x01};
+	char bl_tb5[] = {0xB0, 0x80};
+	char bl_tb6[] = {0xB0, 0x83};
 	int bl_map;
 
 	if (!cb)
@@ -858,7 +863,9 @@ static int boe_setbacklight_cmdq(void *dsi, dcs_write_gce cb, void *handle,
 
 	if ((aod_off_dimming == true) && (level > 0) && (backlight_last_level > 0)
 		&& (aod_state == false)) {
+		cb(dsi, handle, bl_tb5, ARRAY_SIZE(bl_tb5));
 		cb(dsi, handle, bl_tb4, ARRAY_SIZE(bl_tb4));
+		cb(dsi, handle, bl_tb6, ARRAY_SIZE(bl_tb6));
 		aod_off_dimming = false;
 	}
 
@@ -911,7 +918,9 @@ static int boe_setbacklight_cmdq(void *dsi, dcs_write_gce cb, void *handle,
 	bl_tb0[2] = bl_map & 0xFF;
 
 	if (bl_map < LOW_BACKLIGHT_LEVEL) {
+		cb(dsi, handle, bl_tb5, ARRAY_SIZE(bl_tb5));
 		cb(dsi, handle, bl_tb1, ARRAY_SIZE(bl_tb1));
+		cb(dsi, handle, bl_tb6, ARRAY_SIZE(bl_tb6));
 	}
 
         if (!esd_enable && bl_map > 0) {
@@ -922,6 +931,7 @@ static int boe_setbacklight_cmdq(void *dsi, dcs_write_gce cb, void *handle,
 		esd_enable = 0;
 		aod_state = false;
 		aod_display_on = false;
+                cb(dsi, handle, bl_tb2, ARRAY_SIZE(bl_tb2));
 	}
 
 	cb(dsi, handle, bl_tb0, ARRAY_SIZE(bl_tb0));
@@ -977,8 +987,10 @@ static int panel_doze_disable(struct drm_panel *panel, void *dsi, dcs_write_gce 
 static int panel_doze_enable(struct drm_panel *panel, void *dsi, dcs_write_gce cb, void *handle)
 {
         char bl_tb0[] = {0x51, 0x0F, 0xFF};
-        char bl_tb1[] = {0x36, 0x00};
+        char bl_tb1[] = {0xF0, 0xC2, 0x6A, 0x00};
         char bl_tb2[] = {0x55, 0x03};
+        char bl_tb3[] = {0xB0, 0x80};
+        char bl_tb4[] = {0xB0, 0x83};
 
         int level;
         /*50nit*/
@@ -994,7 +1006,9 @@ static int panel_doze_enable(struct drm_panel *panel, void *dsi, dcs_write_gce c
 
         pr_err("debug for lcm %s\n", __func__);
         cb(dsi, handle, bl_tb2, ARRAY_SIZE(bl_tb2));
+        cb(dsi, handle, bl_tb3, ARRAY_SIZE(bl_tb3));
         cb(dsi, handle, bl_tb1, ARRAY_SIZE(bl_tb1));
+        cb(dsi, handle, bl_tb4, ARRAY_SIZE(bl_tb4));
         cb(dsi, handle, bl_tb0, ARRAY_SIZE(bl_tb0));
         pr_info("%s, AOD backlight level = %d\n", __func__, level);
         return 0;
@@ -1044,7 +1058,9 @@ static int oplus_esd_backlight_recovery(void *dsi, dcs_write_gce cb,
 {
 	char bl_tb0[] = {0x51, 0x03, 0xff};
 	char bl_tb1[] = {0x29};
-	char bl_tb2[] = {0x36, 0x10};
+	char bl_tb2[] = {0xF0, 0xC2, 0x6A, 0x01};
+	char bl_tb3[] = {0xB0, 0x80};
+	char bl_tb4[] = {0xB0, 0x83};
 
 	bl_tb0[1] = backlight_level_esd >> 8;
 	bl_tb0[2] = backlight_level_esd & 0xFF;
@@ -1052,7 +1068,9 @@ static int oplus_esd_backlight_recovery(void *dsi, dcs_write_gce cb,
 		return -1;
 	pr_err("%s bl_tb0[1]=%x, bl_tb0[2]=%x\n", __func__, bl_tb0[1], bl_tb0[2]);
 	cb(dsi, handle, bl_tb1, ARRAY_SIZE(bl_tb1));
+	cb(dsi, handle, bl_tb3, ARRAY_SIZE(bl_tb3));
 	cb(dsi, handle, bl_tb2, ARRAY_SIZE(bl_tb2));
+	cb(dsi, handle, bl_tb4, ARRAY_SIZE(bl_tb4));
 	cb(dsi, handle, bl_tb0, ARRAY_SIZE(bl_tb0));
         esd_enable = 1;
 	pr_info("%s, esd_enable", __func__);
@@ -1143,8 +1161,10 @@ static void lcm_cabc_mode_switch_to0(void *dsi, dcs_write_gce cb,
 
 static void cabc_mode_switch(void *dsi, dcs_write_gce cb, void *handle, unsigned int cabc_mode)
 {
-	char bl_tb0[] = {0x36, 0x00};
+	char bl_tb0[] = {0xF0, 0xC2, 0x6A, 0x00};
 	char bl_tb1[] = {0x55, 0x03};
+	char bl_tb2[] = {0xB0, 0x80};
+	char bl_tb3[] = {0xB0, 0x83};
 
 	pr_err("%s cabc_mode = %d\n", __func__, cabc_mode);
 	if (cabc_mode > 3) {
@@ -1158,8 +1178,11 @@ static void cabc_mode_switch(void *dsi, dcs_write_gce cb, void *handle, unsigned
 		return;
 	}
 
-	if (!backlight_last_level)
+	if (!backlight_last_level) {
+		cb(dsi, handle, bl_tb2, ARRAY_SIZE(bl_tb2));
 		cb(dsi, handle, bl_tb0, ARRAY_SIZE(bl_tb0));
+		cb(dsi, handle, bl_tb3, ARRAY_SIZE(bl_tb3));
+	}
 
 	if (cabc_mode == 1) {
 		bl_tb1[1] = 0x13;

@@ -12,7 +12,7 @@
 		rt-tcpc,role_def = <1>; /* 0: Unknown, 1: SNK, 2: SRC */
 					/* 3: DRP, 4: Try.SRC, 5: Try.SNK */
 		rt-tcpc,rp_level = <0>; /* 0: Default, 1: 1.5, 2: 3.0 */
-		rt-tcpc,vconn_supply = <1>;  /* 0: Never, 1: Always, */
+		//rt-tcpc,vconn_supply = <1>;  /* 0: Never, 1: Always, */
 					     /* 2: EMarkOnly, 3: StartOnly */
 		rt1711pd,intr_gpio = <&pio 12 0x0>;
 		rt1711pd,intr_gpio_num = <12>;
@@ -40,7 +40,7 @@
 			 *	MAX_POWER_LV = 0x21, MAX_POWER_LVIC = 0x31
 			 *	MAX_POWER_HV = 0x41, MAX_POWER_HVIC = 0x51
 			 */
-			pd,charging_policy = <0x31>;
+			pd,charging_policy = <0>;
 
 			/*
 			 * Fixed 5V, 500 mA <0x00019032>
@@ -57,9 +57,8 @@
 			 */
 			pd,source-pdo-size = <1>;
 			pd,source-pdo-data = <0x00019064>;
-			pd,sink-pdo-size = <3>;
-			pd,sink-pdo-data = <0x360190c8 0x0002d096 0xc0dc3252>;
-
+			pd,sink-pdo-size = <1>;
+			pd,sink-pdo-data = <0x0001912c>;
 
 			/*
 			 * No DP, host + device
@@ -114,7 +113,7 @@
 			//local_high_cap;
 			//local_give_back;
 			local_no_suspend;
-			local_vconn_supply;
+			//local_vconn_supply;
 
 			//attempt_discover_cable_dfp;
 			//attempt_enter_dp_mode;

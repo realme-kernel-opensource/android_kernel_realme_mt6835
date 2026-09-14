@@ -43,6 +43,7 @@
 
 &mtk_gauge {
 	FUELGAGUE_APPLY = <(0)>;
+	FOR_KPOC_LOGO_SHOW = <(1)>;
 	DISABLE_MTKBATTERY = <(1)>;
 };
 
@@ -362,7 +363,6 @@
 	high-temp-scheme;
 	over_high_temp_thr = <60>;
 	is_support_sc6607;
-	support_quickboot_charge;
 };
 
 &i2c5 {

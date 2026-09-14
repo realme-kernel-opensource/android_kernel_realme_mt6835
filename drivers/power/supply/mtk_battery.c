@@ -179,7 +179,68 @@ int battery_type_check(int *battery_type)
 	return battery_id;
 }
 
-#define BATTYPE_STR_MESSAGE_LEN 32
+#define BATTYPE_STR_MESSAGE_LEN 36
+#define OPLUS_SILICON_TYPE_TAG     "silicon"
+#define OPLUS_GRAPHITE_TYPE_TAG    "graphite"
+static int oplus_gauge_get_battery_type_str(char *buf, size_t buf_size)
+{
+	char bat_type_str[BATTYPE_STR_MESSAGE_LEN] = {0};
+	struct device_node *of_chosen = NULL;
+	char *bat_type = NULL;
+	const char *cmd_line = NULL;
+	int prop_len = 0;
+
+	if (!buf || !buf_size)
+		return -EINVAL;
+	of_chosen = of_find_node_by_path("/chosen");
+	if (!of_chosen) {
+		bm_err("%s: failed to get /chosen \n", __func__);
+		return -ENODEV;
+	}
+	cmd_line = (char *)of_get_property(of_chosen, "bat_type", &prop_len);
+	if (!cmd_line || !prop_len) {
+		bm_err("%s: failed to get bat_type\n", __func__);
+		of_node_put(of_chosen);
+		return -ENODEV;
+	}
+	strncpy(bat_type_str, cmd_line,
+		(prop_len >= BATTYPE_STR_MESSAGE_LEN) ? (BATTYPE_STR_MESSAGE_LEN - 1) : (prop_len));
+	bat_type = strnstr(bat_type_str, OPLUS_SILICON_TYPE_TAG, BATTYPE_STR_MESSAGE_LEN);
+	if (!bat_type) {
+		bat_type = strnstr(bat_type_str, OPLUS_GRAPHITE_TYPE_TAG, BATTYPE_STR_MESSAGE_LEN);
+		if (!bat_type) {
+			bm_err("get battery type is not supported!!!\n");
+			of_node_put(of_chosen);
+			return -ENOTSUPP;
+		}
+	}
+	strncpy(buf, bat_type, buf_size - 1);
+	buf[buf_size - 1] = 0;
+	bm_err("%s: bat_str=%s\n", __func__, buf);
+	of_node_put(of_chosen);
+	return 0;
+}
+static struct device_node *oplus_get_node_by_child(struct device_node *father_node)
+{
+	struct device_node *sub_node = NULL;
+	struct device_node *node = of_find_node_by_path("/soc/oplus_chg_core");
+	char bat_type_str[BATTYPE_STR_MESSAGE_LEN];
+
+	if (!node || !father_node || !of_property_read_bool(node, "oplus,gauge_ic_by_child_node")) {
+		of_node_put(node);
+		return father_node;
+	}
+	of_node_put(node);
+	if (oplus_gauge_get_battery_type_str(bat_type_str, sizeof(bat_type_str)) == 0) {
+		sub_node = of_get_child_by_name(father_node, bat_type_str);
+		if (sub_node) {
+			bm_err("%s: will use sub_node [%s]\n", __func__, bat_type_str);
+			return sub_node;
+		}
+	}
+	return father_node;
+}
+
 static char *oplus_get_battype_str_cmdline(void)
 {
 	struct device_node *of_chosen = NULL;
@@ -5021,6 +5082,9 @@ int battery_init(struct platform_device *pdev)
 	struct oplus_gauge_chip *chip = NULL;
 	struct device_node *node;
 	int removed_bat_decidegc = 0;
+	struct device_node *child_node = oplus_get_node_by_child(pdev->dev.of_node);
+	if (!child_node)
+		child_node = pdev->dev.of_node;
 #endif
 
 	gauge = dev_get_drvdata(&pdev->dev);
@@ -5033,21 +5097,22 @@ int battery_init(struct platform_device *pdev)
 
 #ifdef OPLUS_FEATURE_CHG_BASIC
 /*add for distinguish fuelgague and outlay-gague*/
-	fg_read_dts_val(pdev->dev.of_node, "FUELGAGUE_APPLY", &(fuelgauge_apply), 1);
+	fg_read_dts_val(child_node, "FUELGAGUE_APPLY", &(fuelgauge_apply), 1);
 	bm_err("%s, fuelgauge_apply:%d\n", __func__, fuelgauge_apply);
 
-	fg_read_dts_val(pdev->dev.of_node, "IS_SUBBOARD_TEMP_SUPPORT", &(is_subboard_temp_support), 1);
+	fg_read_dts_val(child_node, "IS_SUBBOARD_TEMP_SUPPORT", &(is_subboard_temp_support), 1);
 	bm_err("%s, is_subboard_temp_support:%d\n", __func__, is_subboard_temp_support);
 
-	fg_read_dts_val(pdev->dev.of_node, "Enable_Is_Force_Full", &(enable_is_force_full), 1);
+	fg_read_dts_val(child_node, "Enable_Is_Force_Full", &(enable_is_force_full), 1);
 	bm_err("%s, enable_is_force_full:%d\n", __func__, enable_is_force_full);
 
-	fg_read_dts_val(pdev->dev.of_node, "USE_MORE_PRECISE_NTC_TABLE", &(use_more_precise_NTC_table), 1);
+	fg_read_dts_val(child_node, "USE_MORE_PRECISE_NTC_TABLE", &(use_more_precise_NTC_table), 1);
 	bm_err("%s, use_more_precise_NTC_table:%d\n", __func__, use_more_precise_NTC_table);
 
-	fg_read_dts_val(pdev->dev.of_node, "EXTERNAL_AUTHENTICATE", &(external_authenticate_support), 1);
+	fg_read_dts_val(child_node, "EXTERNAL_AUTHENTICATE", &(external_authenticate_support), 1);
 	bm_err("%s, external_authenticate_support:%d\n", __func__, external_authenticate_support);
-
+	if (child_node != pdev->dev.of_node)
+		of_node_put(child_node);
 	node = of_find_node_by_name(NULL, "charger");
 	if (node) {
 		ret = fg_read_dts_val(node, "qcom,removed_bat_decidegc", &(removed_bat_decidegc), 1);
@@ -5074,9 +5139,8 @@ int battery_init(struct platform_device *pdev)
 		bm_err("%s, failed to find charger device node\n", __func__);
 	}
 
-	if (use_more_precise_NTC_table) {
+	if (use_more_precise_NTC_table)
 		gm->tmp_table = fg_temp_table_precise;
-	}
 
 	if(is_fuelgauge_apply() == true) {
 		batt_id = devm_iio_channel_get(&pdev->dev, "auxadc5-batt_id_v");
@@ -5155,9 +5219,7 @@ int battery_init(struct platform_device *pdev)
 	INIT_DELAYED_WORK(&gm->aging_trigger_work, oplus_chg_track_aging_trigger_work);
 #endif
 
-	if (ret == 0 && b_recovery_mode == 0)
-		bm_err("[%s]: daemon mode DONE\n", __func__);
-	else {
+	if (ret != 0 || b_recovery_mode != 0) {
 		gm->algo.active = true;
 		battery_algo_init(gm);
 		bm_err("[%s]: enable Kernel mode Gauge\n", __func__);

@@ -485,8 +485,8 @@
 	status = "okay";
 };
 
-#include "mediatek/tcpc_rt1715.dtsi"
-&rt1715_typec {
+#include "mediatek/tcpc_cps8851.dtsi"
+&cps8851_typec {
 	charger = <&sgm41542>;
 	status = "okay";
 };

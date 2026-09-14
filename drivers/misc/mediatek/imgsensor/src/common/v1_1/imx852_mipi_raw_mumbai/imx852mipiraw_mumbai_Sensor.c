@@ -80,6 +80,7 @@ static kal_uint8 qsc_flag = 0, spc_flag = 0;
 static BYTE imx852_common_data[CAMERA_EEPPROM_COMDATA_LENGTH] = { 0 };
 static uint8_t deviceInfo_register_value = 0;
 static kal_uint8 imx852_hw_version = 0;
+static bool sNeedResetFps = false;
 
 static struct imgsensor_info_struct imgsensor_info = {
     .sensor_id = IMX852_SENSOR_ID_MUMBAI,
@@ -735,10 +736,14 @@ static void write_shutter(kal_uint32 shutter, kal_bool gph)
         realtime_fps = imgsensor.pclk / imgsensor.line_length * 10
                 / imgsensor.frame_length;
         LOG_INF("autoflicker enable, realtime_fps = %d\n", realtime_fps);
-        if (realtime_fps >= 297 && realtime_fps <= 305)
+        if ((realtime_fps >= 297 && realtime_fps <= 305) || (sNeedResetFps && realtime_fps >= 296)) {
             set_max_framerate(296, 0);
-        else if (realtime_fps >= 147 && realtime_fps <= 150)
+            sNeedResetFps = false;
+        }
+        else if (realtime_fps >= 147 && realtime_fps <= 150) {
             set_max_framerate(146, 0);
+            sNeedResetFps = true;
+        }
     }
 
     if (shutter > (imgsensor_info.max_frame_length - imgsensor_info.margin)) {

@@ -2450,7 +2450,7 @@ static kal_uint32 feature_control(MSDK_SENSOR_FEATURE_ENUM feature_id,
             return ERROR_INVALID_SCENARIO_ID;
             }
 
-        isDisableWriteInsensorZoomSetting = (*feature_data);
+        isDisableWriteInsensorZoomSetting = (*((kal_bool *)feature_data));
 
         LOG_INF("isDisableWriteInsensorZoomSetting %d\n",isDisableWriteInsensorZoomSetting);
         break;

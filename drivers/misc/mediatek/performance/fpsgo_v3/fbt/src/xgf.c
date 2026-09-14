@@ -142,6 +142,9 @@ EXPORT_SYMBOL(xgf_ema2_predict_fp);
 void (*xgf_ema2_init_fp)(struct xgf_ema2_predictor *pt);
 EXPORT_SYMBOL(xgf_ema2_init_fp);
 
+static void __nocfi xgf_tracing_register(void);
+static void __nocfi xgf_tracing_unregister(void);
+
 static inline void xgf_lock(const char *tag)
 {
 	mutex_lock(&xgf_main_lock);
@@ -810,6 +813,7 @@ static ssize_t xgf_trace_enable_store(struct kobject *kobj,
 	int val = -1;
 	char *acBuffer = NULL;
 	int arg;
+	int enable;
 
 	acBuffer = kcalloc(FPSGO_SYSFS_MAX_BUFF_SIZE, sizeof(char), GFP_KERNEL);
 	if (!acBuffer)
@@ -818,8 +822,15 @@ static ssize_t xgf_trace_enable_store(struct kobject *kobj,
 	if ((count > 0) && (count < FPSGO_SYSFS_MAX_BUFF_SIZE)) {
 		if (scnprintf(acBuffer,
 				FPSGO_SYSFS_MAX_BUFF_SIZE, "%s", buf)) {
-			if (kstrtoint(acBuffer, 0, &arg) == 0)
-				val = arg;
+			if (kstrtoint(acBuffer, 0, &arg) == 0) {
+				enable = !!arg;
+				mutex_lock(&xgf_main_lock);
+				if (xgf_trace_enable != enable) {
+					enable ? xgf_tracing_register() : xgf_tracing_unregister();
+					xgf_trace_enable = enable;
+				}
+				mutex_unlock(&xgf_main_lock);
+			}
 			else
 				goto out;
 		}

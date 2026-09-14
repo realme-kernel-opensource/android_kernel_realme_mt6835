@@ -719,7 +719,7 @@ static int baikall5_i2c_probe(struct i2c_client *client, const struct i2c_device
     int i;
     bool curProject = false;
     pr_info("baikall5_i2c_probe Probe start.\n");
-    curProject = is_project(24351) || is_project(24091) || is_project(24092) || is_project(24352);
+    curProject = is_project(24351) || is_project(24091) || is_project(24092);
 
     if (!curProject) {
         err = -ENODEV;

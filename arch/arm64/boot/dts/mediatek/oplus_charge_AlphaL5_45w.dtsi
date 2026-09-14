@@ -357,6 +357,7 @@
 	oplus,poweroff_emergency_batt_temp = <770>;
 	oplus,usbtemp_batt_temp_over_hot = <60>;
 	oplus,usbtemp_temp_gap_with_batt_temp_in_over_hot = <15>;
+	oplus,abnormal_disconnect_keep_connect;
 
 	oplus,batt_full_time = <60>;
 
@@ -750,8 +751,8 @@
 &odm {
 	oplus,track-charge {
 		compatible = "oplus,track-charge";
-		track,fast_chg_break_t_thd = <1000>;
-		track,general_chg_break_t_thd = <200>;
+		track,fast_chg_break_t_thd = <1400>;
+		track,general_chg_break_t_thd = <300>;
 		track,voocphy_type = <2>;
 		track,wired_max_power = <45000>;
 		track,wired_fast_chg_scheme = <4>;

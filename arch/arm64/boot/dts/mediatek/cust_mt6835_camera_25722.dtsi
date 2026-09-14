@@ -295,14 +295,21 @@
         #address-cells = <1>;
         #size-cells = <0>;
 
-	mtk_flashlights_mumbai:flashlights_mumbai@63 {
+	mtk_flashlights_mumbaicd:flashlights_mumbaicd@63 {
 		compatible = "mediatek,strobe_main";
 		reg = <0x63>;
 		status = "okay";
 	};
 };
 
-&flashlights_mumbai {
+&flashlights_mumbaicd {
+	pinctrl-names = "mumbaicd_default",
+			"mumbaicd_hwen_high",
+			"mumbaicd_hwen_low";
+
+	pinctrl-0 = <&flashlights_mumbaicd_pins_default>;
+	pinctrl-1 = <&flashlights_mumbaicd_pins_hwen_high>;
+	pinctrl-2 = <&flashlights_mumbaicd_pins_hwen_low>;
 	status = "okay";
 	flash@0{
 		reg = <0>;
@@ -317,6 +324,24 @@
 	};
 };
 
+&pio {
+	flashlights_mumbaicd_pins_default:default {
+	};
+	flashlights_mumbaicd_pins_hwen_high: hwen_high {
+		pins_cmd_dat {
+			pinmux = <PINMUX_GPIO55__FUNC_GPIO55>;
+			slew-rate = <1>;
+			output-high;
+		};
+	};
+	flashlights_mumbaicd_pins_hwen_low: hwen_low {
+		pins_cmd_dat {
+			pinmux = <PINMUX_GPIO55__FUNC_GPIO55>;
+			slew-rate = <1>;
+			output-low;
+		};
+	};
+};
 
 &mtk_composite_v4l2_1 {
 	port@0 {

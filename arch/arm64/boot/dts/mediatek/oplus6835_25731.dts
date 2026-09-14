@@ -547,6 +547,12 @@ gpio_uff_cs_pull_down:gpio_uff_cs_pull_down{
 		};
 	};
 };
+&odm {
+    oplus_bsp_midas {
+        compatible = "oplus,bsp_midas";
+        feature-disable;
+    };
+};
 &soc {
     //#ifdef CONFIG_OPLUS_BINDER_STRATEGY
     oplus_binder_sched {

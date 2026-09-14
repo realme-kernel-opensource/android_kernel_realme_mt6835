@@ -75,11 +75,11 @@
 			direction = <3>;
 			eint_num = <0>;
 			para_num = <2>;
-			mag_para_1 {
-				match_projects = <25610 25676 25685 25731 25722 25720 25618 25619 25730>;
+			mag_para_1 {//NO-NFC
+				match_projects = <25610 25676 25685 25731 25722 25720 25618 25619 25730 26881>;
 				soft-mag-parameter = <10426 0 100 0 78 1 53 0 9529 0 153 0 52 1 266 1 10480 0>;
 			};
-			mag_para_2 {
+			mag_para_2 {//HAS-NFC
 				match_projects = <25686 25721>;
 				soft-mag-parameter = <9566 0 996 0 862 0 1230 0 9713 0 156 1 75 1 219 1 10463 0>;
 			};

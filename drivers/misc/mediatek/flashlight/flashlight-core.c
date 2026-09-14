@@ -85,6 +85,7 @@ extern const struct flashlight_device_id flashlight_id_chopard[];
 extern const struct flashlight_device_id flashlight_id_chopardb[];
 extern const struct flashlight_device_id flashlight_id_mumbai[];
 extern const struct flashlight_device_id flashlight_id_mumbaih[];
+extern const struct flashlight_device_id flashlight_id_mumbaicd[];
 int flashlight_device_num = 0;
 
 /******************************************************************************
@@ -373,7 +374,7 @@ int flashlight_dev_register(
 	} else if (is_project(24251) || is_project(24252) || is_project(24253) || is_project(24254) || is_project(24059)) {
 		flashlight_id = flashlight_id_alphal5;
 		flashlight_device_num = 1;
-	} else if (is_project(24351) || is_project(24091) || is_project(24092) || is_project(24352)) {
+	} else if (is_project(24351) || is_project(24091) || is_project(24092)) {
 		flashlight_id = flashlight_id_baikall5;
 		flashlight_device_num = 1;
 	} else if (is_project(25291) || is_project(25292) || is_project(25055)) {
@@ -421,11 +422,16 @@ int flashlight_dev_register(
 		flashlight_device_num = 1;
 	}
 
-	if (is_project(25610) || is_project(25676) || is_project(25685) || is_project(25686) || is_project(25618) ||
-		is_project(25619) || is_project(25720) || is_project(25721) || is_project(25722) || is_project(25730) ||
-		is_project(25745) || is_project(25746)) {
+	if (is_project(25610) || is_project(25676) || is_project(25685) || is_project(25686) ||
+		is_project(25731) || is_project(25745) || is_project(25746) || is_project(26600) || is_project(26845) || is_project(26885)) {
 		pr_err("set flashlight id mumbai\n");
 		flashlight_id = flashlight_id_mumbai;
+		flashlight_device_num = 1;
+	}
+
+	if (is_project(25618) || is_project(25619) || is_project(25720) || is_project(25721) || is_project(25722) || is_project(25730)) {
+		pr_err("set flashlight id mumbai\n");
+		flashlight_id = flashlight_id_mumbaicd;
 		flashlight_device_num = 1;
 	}
 

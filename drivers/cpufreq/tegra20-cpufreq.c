@@ -110,6 +110,6 @@ static struct platform_driver tegra20_cpufreq_driver = {
 module_platform_driver(tegra20_cpufreq_driver);
 
 MODULE_ALIAS("platform:tegra20-cpufreq");
-MODULE_AUTHOR("Colin Cross <ccross@android.com>");
+MODULE_AUTHOR("Colin Cross <ccross");
 MODULE_DESCRIPTION("NVIDIA Tegra20 cpufreq driver");
 MODULE_LICENSE("GPL");

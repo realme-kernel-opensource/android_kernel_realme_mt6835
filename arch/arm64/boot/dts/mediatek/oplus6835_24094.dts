@@ -11,7 +11,6 @@
 #include "mediatek/mt6835_6377.dtsi"
 #include "mediatek/cust_mt6835_ac321_lcd_720x1570.dtsi"
 #include "mediatek/cust_mt6835_camera_24094.dtsi"
-#include "mediatek/oplus_nfc_baikal_sn220e_pn560.dtsi"
 
 /* #ifdef OPLUS_FEATURE_CHG_BASIC */
 /* Add for DX-2 charge device-tree */
@@ -425,6 +424,9 @@
 			oplus_boost_pool {
 				feature-disable;
 			};
+			oplus_bsp_uxmem_opt {
+				feature-disable;
+			};
 			oplus_bsp_zram_opt {
 				balance_anon_file_reclaim_always_true;
 			};
@@ -436,6 +438,9 @@
 			oplus_bsp_uxmem_opt {
 				feature-disable;
 			};
+                        ezreclaimd {
+                                feature-enable;
+                        };
 			oplus_bsp_zram_opt {
 				balance_anon_file_reclaim_always_true;
 			};

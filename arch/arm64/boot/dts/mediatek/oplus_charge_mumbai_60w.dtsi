@@ -851,6 +851,7 @@
 		oplus,default_protocol_list = <CHG_PROTOCOL_VOOC
 							CHG_PROTOCOL_PPS
 							CHG_PROTOCOL_PD>;
+		oplus,protocol_wait_list = <CHG_PROTOCOL_VOOC 1000>;
 	};
 
 	oplus_virtual_cp: oplus,virtual_cp {
@@ -1347,8 +1348,8 @@
 
 		//dpdm-supply = <&usb2_phy0>;
 
-		normal-init-work-delay-ms = <8000>;
-		other-init-work-delay-ms = <8000>;
+		normal-init-work-delay-ms = <9500>;
+		other-init-work-delay-ms = <9500>;
 
 		oplus,cp_ic = <&oplus_virtual_cp>;
 		oplus,ic_type = <OPLUS_CHG_IC_BUCK>;

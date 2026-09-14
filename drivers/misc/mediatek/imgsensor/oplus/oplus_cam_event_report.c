@@ -17,12 +17,15 @@
 #include <linux/rtc.h>
 #include <linux/proc_fs.h>
 #include <linux/kfifo.h>
+#include <linux/uidgid.h>
 
 #include "oplus_cam_event_report.h"
 #if defined(CONFIG_OPLUS_FEATURE_FEEDBACK) || defined(CONFIG_OPLUS_FEATURE_FEEDBACK_MODULE)
 #include <soc/oplus/dft/kernel_fb.h>
 #endif
 
+#define AID_ROOT    0
+#define AID_CAMERASERVER  1047
 #define CAM_EVENT_NAME "cam-event"
 #define DTS_COMP_CAM_EVENT_NAME "oplus,cam-event"
 #define DEFAULT_REPORT_EVENT_TIME 30
@@ -181,14 +184,20 @@ static ssize_t kernel_fb_read(struct file *file,
 	size_t count,
 	loff_t *ppos)
 {
-	char rcv_data[BUFF_SIZE]={0};
-	int ret;
+	char rcv_data[BUFF_SIZE] = {0};
+	unsigned int ret;
+	size_t copy_len;
+
 	ret = kfifo_out(&gkfifo, rcv_data, sizeof(rcv_data));
-	pr_info("push_sensor_name rcv_data = %s, len = %d", rcv_data, strlen(rcv_data));
-	if (strlen(rcv_data) == 0 || copy_to_user(buf, rcv_data, BUFF_SIZE)) {
+	if (ret == 0) {
 		return 0;
 	}
-	return BUFF_SIZE;
+	copy_len = min_t(size_t, strlen(rcv_data), count);
+	pr_info("push_sensor_name rcv_data = %s, len = %lu, copy_len = %lu", rcv_data, strlen(rcv_data), copy_len);
+	if (copy_to_user(buf, rcv_data, copy_len)) {
+		return -EFAULT;
+	}
+	return copy_len;
 }
 
 static const struct proc_ops cam_kern_fb_fops = {
@@ -249,11 +258,12 @@ static int cam_event_probe(struct platform_device *pdev)
 	cam_event_data->expire = jiffies + DEFAULT_REPORT_EVENT_TIME * HZ;
 	mutex_init(&cam_event_data->lock);
 
-	d_entry = proc_create_data("cam_kern_fb", 0666, NULL, &cam_kern_fb_fops, NULL);
+	d_entry = proc_create_data("cam_kern_fb", 0660, NULL, &cam_kern_fb_fops, NULL);
 	if (!d_entry) {
 		pr_err("failed to create kern_fb node\n");
 		return -ENODEV;
 	}
+	proc_set_user(d_entry, KUIDT_INIT(AID_CAMERASERVER), KGIDT_INIT(AID_CAMERASERVER));
 	kfifo_init(&gkfifo, cam_probe_fail_list, BUFF_SIZE);
 	return 0;
 

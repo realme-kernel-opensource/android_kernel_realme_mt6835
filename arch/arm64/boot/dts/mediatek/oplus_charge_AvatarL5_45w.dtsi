@@ -270,6 +270,11 @@
 	qcom,support_ntc_01c_precision;
 	qcom,sw_vfloat_over_protect_enable;
 
+	oplus,full_limit_curr_support;
+	oplus,fcl_index = <1>;
+	oplus,vb_offset = <0>;
+	oplus_spec,dec-vol-fv-mv = <40>;
+
 	qcom,normal_vterm_hw_inc = <18>;
 	qcom,non_normal_vterm_hw_inc = <18>;
 	qcom,usbtemp_batttemp_gap = <12>;
@@ -365,6 +370,8 @@
 	high-temp-scheme;
 	over_high_temp_thr = <60>;
 	is_support_sc6607;
+	support_chg_time_cnt;
+	support_icl_optimization;
 
 	max_charger_voltage = <15000000>;
 	boot_battery_voltage = <3400000>;

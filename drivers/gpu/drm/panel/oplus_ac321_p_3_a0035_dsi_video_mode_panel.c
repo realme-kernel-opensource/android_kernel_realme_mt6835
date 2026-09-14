@@ -179,7 +179,7 @@ static void lcm_init_set_cabc(struct lcm *ctx, int cabc_mode)
 		pr_info("%s()  set_low_brightness_cabc_mode ture, cabc_mode =%d return!\n",	__func__, cabc_mode);
 		return;
 	}
-	lcm_dcs_write_seq_static(ctx, 0xFF, 0x98, 0x83, 0x00);
+	lcm_dcs_write_seq_static(ctx, 0xFF, 0x5A, 0xA5, 0x00);
 	if (cabc_mode == 0) {
 		lcm_dcs_write_seq_static(ctx, 0x55, 0x00);
 	} else if (cabc_mode == 1) {
@@ -600,20 +600,18 @@ static struct mtk_panel_params ext_params_120HZ = {/* 120hz */
 
 static void lcm_dimming_on(void *dsi, dcs_write_gce cb,	void *handle)
 {
-	char bl_tb0[] = {0xFF, 0x98, 0x83, 0x00};
+	char bl_tb0[] = {0xFF, 0x5A, 0xA5, 0x00};
 	char bl_tb1[] = {0x68, 0x05, 0x00};
 	char bl_tb2[] = {0x53, 0x2C};
-	char bl_tb3[] = {0x22, 0x00};
 
 	cb(dsi, handle, bl_tb0, ARRAY_SIZE(bl_tb0));
 	cb(dsi, handle, bl_tb1, ARRAY_SIZE(bl_tb1));
 	cb(dsi, handle, bl_tb2, ARRAY_SIZE(bl_tb2));
-	cb(dsi, handle, bl_tb3, ARRAY_SIZE(bl_tb3));
 	pr_info("%s end\n", __func__);
 }
 static void lcm_dimming_off(void *dsi, dcs_write_gce cb, void *handle)
 {
-	char bl_tb0[] = {0xFF, 0x98, 0x83, 0x00};
+	char bl_tb0[] = {0xFF, 0x5A, 0xA5, 0x00};
 	char bl_tb1[] = {0x68, 0x03, 0x00};
 	char bl_tb2[] = {0x53, 0x2C};
 
@@ -627,7 +625,7 @@ static int lcm_dimming_flag = 0;
 static int lcm_setbacklight_cmdq(void *dsi, dcs_write_gce cb,
 	void *handle, unsigned int level)
 {
-	char bl_tb2[] = {0xFF, 0x98, 0x83, 0x00};
+	char bl_tb2[] = {0xFF, 0x5A, 0xA5, 0x00};
 	char bl_tb0[] = {0x51, 0x03, 0xff};
 
 	if (level > 4095) {
@@ -738,7 +736,7 @@ static int panel_ext_reset(struct drm_panel *panel, int on)
 static int oplus_esd_backlight_recovery(void *dsi, dcs_write_gce cb,
 		void *handle)
 {
-	unsigned char bl_page0[] = {0xFF, 0x98, 0x83, 0x00};
+	unsigned char bl_page0[] = {0xFF, 0x5A, 0xA5, 0x00};
 	unsigned char bl_tb0[] = {0x51, 0x03, 0xff};
 	bl_tb0[1] = esd_brightness >> 8;
 	bl_tb0[2] = esd_brightness & 0xFF;
@@ -754,7 +752,7 @@ static int oplus_esd_backlight_recovery(void *dsi, dcs_write_gce cb,
 static void lcm_cabc_mode_switch_to0(void *dsi, dcs_write_gce cb,
 		void *handle, unsigned int cabc_mode)
 {
-	unsigned char cabc_cmd_page0[] = {0xFF, 0x98, 0x83, 0x00};
+	unsigned char cabc_cmd_page0[] = {0xFF, 0x5A, 0xA5, 0x00};
 	unsigned char cabc_cmd_1[] = {0x55, 0x00};
 	unsigned char cabc_cmd_2[] = {0x53, 0x2C};
 
@@ -768,7 +766,7 @@ static void lcm_cabc_mode_switch_to0(void *dsi, dcs_write_gce cb,
 static void lcm_cabc_mode_switch(void *dsi, dcs_write_gce cb,
 		void *handle, unsigned int cabc_mode)
 {
-	unsigned char cabc_cmd_page0[] = {0xFF, 0x98, 0x83, 0x00};
+	unsigned char cabc_cmd_page0[] = {0xFF, 0x5A, 0xA5, 0x00};
 	unsigned char cabc_cmd_1[] = {0x55, 0x00};
 	unsigned char cabc_cmd_2[] = {0x53, 0x2C};
 

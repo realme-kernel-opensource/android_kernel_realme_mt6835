@@ -102,7 +102,7 @@
 			local_vconn_supply;
 
 			//attemp_discover_cable_dfp;
-			attempt_enter_dp_mode;
+			//attempt_enter_dp_mode;
 			attempt_discover_cable;
 			attempt_discover_id;
 			attempt_discover_svid;

@@ -37,6 +37,7 @@ obj-$(CONFIG_MTK_FLASHLIGHT_CHOPARD)      += flashlights-chopard.o
 obj-$(CONFIG_MTK_FLASHLIGHT_CHOPARDB)      += flashlights-chopardb.o
 obj-$(CONFIG_MTK_FLASHLIGHT_MUMBAI)      += flashlights-mumbai.o
 obj-$(CONFIG_MTK_FLASHLIGHT_MUMBAIH)      += flashlights-mumbaih.o
+obj-$(CONFIG_MTK_FLASHLIGHT_MUMBAICD)      += flashlights-mumbaicd.o
 endif
 ccflags-$(CONFIG_MTK_FLASHLIGHT_DEBUG)     := -DDEBUG
 ccflags-$(CONFIG_MTK_FLASHLIGHT_PT)        += -DCONFIG_MTK_FLASHLIGHT_PT

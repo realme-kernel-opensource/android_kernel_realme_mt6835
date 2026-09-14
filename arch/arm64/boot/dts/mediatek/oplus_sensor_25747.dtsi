@@ -76,7 +76,7 @@
 			eint_num = <0>;
 			para_num = <2>;
 			mag_para_1 {
-				match_projects = <25745 25747>;
+				match_projects = <25745 25747 26600 26845>;
 				soft-mag-parameter = <10260 0 144 0 64 1 196 1 9992 0 300 0 107 1 182 1 10593 0>;
 			};
 			mag_para_2 {

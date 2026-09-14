@@ -66,7 +66,20 @@ extern int get_boot_mode(void);
 #include <linux/reboot.h>
 
 #ifdef CONFIG_MTK_ROUND_CORNER_SUPPORT
-#include "../mediatek/mediatek_v2/mtk_corner_pattern/ae152_p_4_a0030_hd_data_hw_roundedpattern.h"
+#include "../mediatek/mediatek_v2/mtk_corner_pattern/ae259_p_4_a0030_hd_data_hw_roundedpattern.h"
+extern unsigned int get_project(void);
+
+static void panel_setup_round_corner(struct mtk_panel_params *params)
+{
+	unsigned int prj_id = get_project();
+
+	params->round_corner_en = 1;
+	params->corner_pattern_height = ROUND_CORNER_H_TOP;
+	params->corner_pattern_height_bot = ROUND_CORNER_H_BOT;
+	params->corner_pattern_tp_size = sizeof(top_rc_pattern);
+	params->corner_pattern_lt_addr = (void *)top_rc_pattern;
+	pr_info("%s, prj_id = %d\n", __func__, prj_id);
+}
 #endif
 
 extern unsigned int last_backlight;
@@ -573,10 +586,6 @@ static struct mtk_panel_params ext_params_60hz = {
                 .cabc_three_to_zero = 1,
                 #ifdef CONFIG_MTK_ROUND_CORNER_SUPPORT
                 .round_corner_en = 1,
-                .corner_pattern_height = ROUND_CORNER_H_TOP,
-                .corner_pattern_height_bot = ROUND_CORNER_H_BOT,
-                .corner_pattern_tp_size = sizeof(top_rc_pattern),
-                .corner_pattern_lt_addr = (void *)top_rc_pattern,
                 #endif
 };
 
@@ -624,10 +633,6 @@ static struct mtk_panel_params ext_params_90hz = {
                 .cabc_three_to_zero = 1,
                 #ifdef CONFIG_MTK_ROUND_CORNER_SUPPORT
                 .round_corner_en = 1,
-                .corner_pattern_height = ROUND_CORNER_H_TOP,
-                .corner_pattern_height_bot = ROUND_CORNER_H_BOT,
-                .corner_pattern_tp_size = sizeof(top_rc_pattern),
-                .corner_pattern_lt_addr = (void *)top_rc_pattern,
                 #endif
 };
 
@@ -675,10 +680,6 @@ static struct mtk_panel_params ext_params_120hz = {
                 .cabc_three_to_zero = 1,
                 #ifdef CONFIG_MTK_ROUND_CORNER_SUPPORT
                 .round_corner_en = 1,
-                .corner_pattern_height = ROUND_CORNER_H_TOP,
-                .corner_pattern_height_bot = ROUND_CORNER_H_BOT,
-                .corner_pattern_tp_size = sizeof(top_rc_pattern),
-                .corner_pattern_lt_addr = (void *)top_rc_pattern,
                 #endif
 };
 
@@ -726,10 +727,6 @@ static struct mtk_panel_params ext_params_45hz = {
                 .cabc_three_to_zero = 1,
                 #ifdef CONFIG_MTK_ROUND_CORNER_SUPPORT
                 .round_corner_en = 1,
-                .corner_pattern_height = ROUND_CORNER_H_TOP,
-                .corner_pattern_height_bot = ROUND_CORNER_H_BOT,
-                .corner_pattern_tp_size = sizeof(top_rc_pattern),
-                .corner_pattern_lt_addr = (void *)top_rc_pattern,
                 #endif
 };
 
@@ -777,10 +774,6 @@ static struct mtk_panel_params ext_params_144hz = {
                 .cabc_three_to_zero = 1,
                 #ifdef CONFIG_MTK_ROUND_CORNER_SUPPORT
                 .round_corner_en = 1,
-                .corner_pattern_height = ROUND_CORNER_H_TOP,
-                .corner_pattern_height_bot = ROUND_CORNER_H_BOT,
-                .corner_pattern_tp_size = sizeof(top_rc_pattern),
-                .corner_pattern_lt_addr = (void *)top_rc_pattern,
                 #endif
 };
 
@@ -1392,6 +1385,13 @@ static int jdi_probe(struct mipi_dsi_device *dsi)
         /* check_is_bdg_support(dev); */
 #if defined(CONFIG_MTK_PANEL_EXT)
         mtk_panel_tch_handle_reg(&ctx->panel);
+        #ifdef CONFIG_MTK_ROUND_CORNER_SUPPORT
+        panel_setup_round_corner(&ext_params_60hz);
+        panel_setup_round_corner(&ext_params_90hz);
+        panel_setup_round_corner(&ext_params_120hz);
+        panel_setup_round_corner(&ext_params_45hz);
+        panel_setup_round_corner(&ext_params_144hz);
+        #endif
         ret = mtk_panel_ext_create(dev, &ext_params_120hz, &ext_funcs, &ctx->panel);
         if (ret < 0)
                 return ret;

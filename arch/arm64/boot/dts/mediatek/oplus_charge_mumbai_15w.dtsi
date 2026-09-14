@@ -51,6 +51,7 @@
 	FG_METER_RESISTANCE = <(45)>; /* The resistance of PCB */
 	CAR_TUNE_VALUE = <(99)>; /* Tune value for current measurement */
 	TEMPERATURE_T4 = <(-10)>;
+	KEEP_100_PERCENT =<0>;
 	BATT_ID_FAST_CHECK = <(1)>;
 	R_FG_VALUE = <(2)>;/* R_sense resistance */
 	io-channels = <&pmic_adc AUXADC_BAT_TEMP>,
@@ -170,6 +171,7 @@
 					OPLUS_IC_FUNC_BUCK_HARDWARE_INIT
 					OPLUS_IC_FUNC_BUCK_KICK_WDT
 					OPLUS_IC_FUNC_GET_OTG_ENABLE
+					OPLUS_IC_FUNC_SET_USB_DISCHG_ENABLE
 				>;
 				virqs = <
 					OPLUS_IC_VIRQ_ERR
@@ -355,6 +357,7 @@
 					OPLUS_IC_FUNC_CP_SET_UCP_DISABLE
 					OPLUS_IC_FUNC_CP_GET_IIN_MAX
 					OPLUS_IC_FUNC_CP_WATCHDOG_RESET
+					OPLUS_IC_FUNC_CP_SET_SSTIMEOUT_UCP_ENABLE
 				>;
 				virqs = <
 					OPLUS_IC_VIRQ_ERR
@@ -578,12 +581,6 @@
 			oplus,ic_type = <OPLUS_CHG_IC_VIRTUAL_BUCK>;
 			oplus,ic_index = <0>;
 
-			oplus,dischg-gpio = <&pio 34 0x00>;/*VBUS_SHORT*/
-
-			pinctrl-names = "dischg_enable", "dischg_disable";
-			pinctrl-0 = <&dischg_enable>;
-			pinctrl-1 = <&dischg_disable>;
-
 			io-channels = <&auxadc 4>, <&auxadc 3>;
 			io-channel-names = "usb_temp_adc_l", "usb_temp_adc_r";
 
@@ -597,6 +594,9 @@
 		oplus,gauge_ic = <&oplus_virtual_gauge>;
 		oplus,voocphy_ic = <&oplus_virtual_vphy>;
 		oplus,topic-update-interval = <10000>;
+		oplus,fcl_support;
+		oplus,fcl_index = <1>;
+		oplus,vb_offset = <0>;
 
 		oplus_virtual_gauge: oplus,virtual_gauge {
 			compatible = "oplus,virtual_gauge";
@@ -703,6 +703,8 @@
 		oplus_spec,cool_down_pdqc_curr_ma = <1200 1500 2000 1500>;
 		oplus_spec,cool_down_vooc_curr_ma = <1200 1500 2000 2500 3000 3000>;
 		oplus_spec,cool_down_normal_curr_ma = <1200 1500 2000 3000 3000>;
+		oplus_spec,cool_down_sale_pdqc_vol_mv = <5000>;
+		oplus_spec,cool_down_sale_pdqc_curr_ma = <900>;
 
 		oplus_spec,vbus_ov_thr_mv = <5800 11000>;
 		oplus_spec,vbus_uv_thr_mv = <3400 3400>;
@@ -713,6 +715,16 @@
 					    0   385 4000 1 0
 					    385 395 3000 2 0
 					    395 420 2000 2 1>;
+		oplus,dcp_strategy_name = "cgcl";
+		oplus,dcp_strategy_data = < OPLUS_STRATEGY_USE_SHELL_TEMP
+					   0   400 3000 1 0
+					   400 410 3000 2 0
+					   410 420 2400 2 1>;
+		oplus,pd_strategy_name = "cgcl";
+		oplus,pd_strategy_data = < OPLUS_STRATEGY_USE_SHELL_TEMP
+					   0   400 3000 1 0
+					   400 410 3000 2 0
+					   410 420 2400 2 1>;
 	};
 
 	oplus_chg_comm: oplus,comm {
@@ -875,7 +887,12 @@
 	};
 };
 
+&mt6375_chg {
+	support_icl_optimization;
+};
+
 &lk_charger {
+	support_icl_optimization;
 	support_tuv_authentication;
 	charger_no_wiress;
 	sdp_screenon_voltage = <3250>;
@@ -895,6 +912,10 @@
 	ta_ac_charger_current = <1500000>;
 	pd_charger_current = <500000>;
 	support_quickboot_charge;
+	support_chg_time_cnt;
+	support_chg_track_r;
+	chg_time_uvlo = <2700>;
+	chg_time_vmax = <4400>;
 };
 
 &i2c3 {
@@ -1351,7 +1372,6 @@
 		normal-init-work-delay-ms = <8000>;
 		other-init-work-delay-ms = <8000>;
 
-		oplus,cp_ic = <&oplus_virtual_cp>;
 		oplus,ic_type = <OPLUS_CHG_IC_BUCK>;
 		oplus,ic_index = <0>;
 		qcom,batfet_reset_disable;

@@ -557,6 +557,9 @@ struct msdc_host {
 	bool qos_enable;
 	struct icc_path *bw_path;
 	unsigned int peak_bw;
+#if IS_ENABLED(CONFIG_RPMB)
+	struct semaphore rpmb_sem;
+#endif
 };
 
 #endif  /* _MTK_MMC_H_ */

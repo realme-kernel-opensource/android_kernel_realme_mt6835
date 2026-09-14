@@ -7564,6 +7564,16 @@
     	};
 	};
 
+	flashlights_mumbaicd: flashlights_mumbaicd {
+    	compatible = "mediatek,flashlights_mumbaicd";
+    	decouple = <1>;
+    	channel@1 {
+                type = <0>;
+                ct = <0>;
+                part = <0>;
+    	};
+	};
+
 	flashlights_mumbaih: flashlights_mumbaih {
     	compatible = "mediatek,flashlights_mumbaih";
     	decouple = <0>;

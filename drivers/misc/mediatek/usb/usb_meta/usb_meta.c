@@ -4,8 +4,6 @@
  *
  * Copyright (c) 2008 Google, Inc.
  * Copyright (c) 2015 MediaTek Inc.
- * Author: Mike Lockwood <lockwood@android.com>
- *         Benoit Goby <benoit@android.com>
  */
 
 #include <linux/init.h>

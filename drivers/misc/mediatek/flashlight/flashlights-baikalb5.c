@@ -573,6 +573,10 @@ static int baikalb5_release(void)
 
     pr_info("Release: %d\n", use_count);
 */
+    baikalb5_disable(BAIKALB5_CHANNEL_CH1);
+    baikalb5_timer_cancel(BAIKALB5_CHANNEL_CH1);
+    baikalb5_disable(BAIKALB5_CHANNEL_CH2);
+    baikalb5_timer_cancel(BAIKALB5_CHANNEL_CH2);
     return 0;
 }
 

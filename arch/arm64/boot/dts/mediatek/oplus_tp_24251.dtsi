@@ -64,6 +64,7 @@
 		touchpanel,button-type = <4>;
 		tp_data_record_support;
 		glove_mode_v2_support;
+		disable_touch_event_support;
 	};
 };
 

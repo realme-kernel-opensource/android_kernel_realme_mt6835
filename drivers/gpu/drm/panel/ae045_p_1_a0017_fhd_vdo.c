@@ -307,11 +307,20 @@ static int lcm_disable(struct drm_panel *panel)
 	if (!ctx->enabled)
 		return 0;
 
+	printk("lcm_disable +++\n");
+	lcm_dcs_write_seq_static(ctx, 0xF0, 0x5A, 0x5A);
+	lcm_dcs_write_seq_static(ctx, 0xB0, 0x00, 0x0C, 0xB2);
+	lcm_dcs_write_seq_static(ctx, 0xB2, 0x40);
+	lcm_dcs_write_seq_static(ctx, 0xF0, 0xA5, 0xA5);
+	usleep_range(25000, 25100);
+	lcm_dcs_write_seq_static(ctx, 0x51, 0x00, 0x00);
+	usleep_range(50000, 50100);
+
 	if (ctx->backlight) {
 		ctx->backlight->props.power = FB_BLANK_POWERDOWN;
 		backlight_update_status(ctx->backlight);
 	}
-
+	printk("lcm_disable ---\n");
 	ctx->enabled = false;
 
 	return 0;

@@ -46,6 +46,7 @@
 	charger = <&sc6607>;
 	//SHUTDOWN_1_TIME = <(10)>;
 	FUELGAGUE_APPLY = <(1)>;
+	FOR_KPOC_LOGO_SHOW = <(1)>;
 	RBAT_PULL_DOWN_R = <(24000)>;
 	RBAT_PULL_UP_R = <(12000)>;
 	RBAT_PULL_UP_VOLT = <(2800)>;
@@ -390,7 +391,6 @@
 	high-temp-scheme;
 	over_high_temp_thr = <60>;
 	is_support_sc6607;
-	support_quickboot_charge;
 };
 
 &i2c3 {

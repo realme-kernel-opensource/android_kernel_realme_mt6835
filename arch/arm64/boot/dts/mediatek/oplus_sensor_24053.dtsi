@@ -209,6 +209,10 @@
 			status = "okay";
 			decision_table_index = <5>;
 		};
+		als_panel_boe_1: als_panel_boe_1 {
+			status = "okay";
+			decision_table_index = <9>;
+		};
 		light_2: light_2 {
 			status = "okay";
 			sensor_name = <19>; //SIP3511

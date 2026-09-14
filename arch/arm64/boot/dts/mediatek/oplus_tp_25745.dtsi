@@ -24,8 +24,8 @@
 		touchpanel,panel-coords = <2880 6280>;
 		touchpanel,display-coords = <720 1570>;	/*hd:720 1612*/
 		touchpanel,touchmajor-limit = <0 54>;
-		platform_support_project = <25745 25746 25747 25748 25622>;
-		platform_support_project_dir = <25745 25745 25745 25745 25745>;
+		platform_support_project = <25745 25746 25747 25748 25622 26600>;
+		platform_support_project_dir = <25745 25745 25745 25745 25745 25745>;
 		platform_support_project_commandline ="ae259_p_4_a0030_hd_dsi_vdo_lcm_drv","ae259_p_7_a0030_hd_dsi_vdo_lcm_drv";	/* hd*/
 		firmware_name = "0xAE152TXD00", "0xAE152TM00";
 		pinctrl-names = "default", "pin_cs_high","pin_cs_low";
@@ -36,6 +36,7 @@
 		touchpanel,smooth-level = <255 5 4 3 2 1>;
 		touchpanel,sensitive-level = <255 1 2 3 4 5>;
 		touchpanel,single-optimized-time = <8>;
+		touchpanel,tp_ic_type = <2>;
 
 		incell_screen;
 		irq_need_dev_resume_ok;
@@ -72,6 +73,7 @@
 		pt17_pt18_test_support;
 		disable_touch_event_support;
 		rainstorm_mode_v2_support;
+		suspend_work_support;
 
 		NF_ILI7807S_PANEL19 {
 			reset-gpio = <&pio 171 0x00>;

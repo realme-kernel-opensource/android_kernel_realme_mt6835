@@ -858,6 +858,11 @@
 #define SENSOR_DRVNAME_GC50F6_MIPI_RAW_MUMBAIF       "gc50f6_mipi_raw_mumbaif"
 #define SC800CS_SENSOR_ID_MUMBAIF                     (0xd154 + SENSOR_ID_OFFSET_MUMBAIF)
 #define SENSOR_DRVNAME_SC800CS_MIPI_RAW_MUMBAIF      "sc800cs_mipi_raw_mumbaif"
+#define SENSOR_ID_OFFSET_MUMBAIK                     0x0004
+#define GC50F6_SENSOR_ID_MUMBAIK                     (0x50f6 + SENSOR_ID_OFFSET_MUMBAIK)
+#define SENSOR_DRVNAME_GC50F6_MIPI_RAW_MUMBAIK       "gc50f6_mipi_raw_mumbaik"
+#define SC800CS_SENSOR_ID_MUMBAIK                     (0xd154 + SENSOR_ID_OFFSET_MUMBAIK)
+#define SENSOR_DRVNAME_SC800CS_MIPI_RAW_MUMBAIK      "sc800cs_mipi_raw_mumbaik"
 #define GC50F6_SENSOR_ID_MUMBAID                        0x3252
 #define SENSOR_DRVNAME_GC50F6_MIPI_RAW_MUMBAID       "gc50f6_mipi_raw_mumbaid"
 #define MT510_SENSOR_ID_MUMBAID                      (0x510 + 0x1)//0x511

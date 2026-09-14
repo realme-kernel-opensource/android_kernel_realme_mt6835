@@ -68,6 +68,7 @@
 		glove_mode_v2_support;
 		lpwg_fw_support;
 		disable_touch_event_support;
+		ili_use_new_driver_version;
 	};
 };
 

@@ -3508,6 +3508,7 @@ static int msdc_drv_probe(struct platform_device *pdev)
 
 #if IS_ENABLED(CONFIG_RPMB)
 	ret = mmc_rpmb_register(mmc);
+	sema_init(&host->rpmb_sem, 1);
 #endif
 
 	return 0;
@@ -3715,30 +3716,50 @@ static int __maybe_unused msdc_suspend(struct device *dev)
 	//#ifdef OPLUS_FEATURE_TP_BASIC
 	struct msdc_host *host = mmc_priv(mmc);
 	//#endif /OPLUS_FEATURE_TP_BASIC
+
+#if IS_ENABLED(CONFIG_RPMB)
+    if ((mmc->caps & MMC_CAP_NONREMOVABLE) && (down_trylock(&host->rpmb_sem))) {
+        dev_info(host->dev, "[%s]down_trylock rpmb_sem fail\n", __func__);
+        return -EBUSY;
+    }
+#endif
+
 	if (mmc->caps2 & MMC_CAP2_CQE) {
 		ret = cqhci_suspend(mmc);
 
 		val = readl(host->base + MSDC_INT);
 		writel(val, host->base + MSDC_INT);
 		if (ret)
-			return ret;
+			goto error;
 	}
 	//#ifdef OPLUS_FEATURE_TP_BASIC
 	pinctrl_select_state(host->pinctrl, host->pins_default);
 	//#endif /OPLUS_FEATURE_TP_BASIC
 
-	return pm_runtime_force_suspend(dev);
+	ret = pm_runtime_force_suspend(dev);
+error:
+#if IS_ENABLED(CONFIG_RPMB)
+	if (ret && (mmc->caps & MMC_CAP_NONREMOVABLE))
+		up(&host->rpmb_sem);
+#endif
+	return ret;
 }
 
 static int __maybe_unused msdc_resume(struct device *dev)
 {
+	int ret;
 	//#ifdef OPLUS_FEATURE_TP_BASIC
 	struct mmc_host *mmc = dev_get_drvdata(dev);
 	struct msdc_host *host = mmc_priv(mmc);
 	pinctrl_select_state(host->pinctrl, host->pins_uhs);
 	//#endif /OPLUS_FEATURE_TP_BASIC
 
-	return pm_runtime_force_resume(dev);
+    ret = pm_runtime_force_resume(dev);
+#if IS_ENABLED(CONFIG_RPMB)
+	if (!ret && (mmc->caps & MMC_CAP_NONREMOVABLE))
+		up(&host->rpmb_sem);
+#endif
+	return ret;
 }
 
 static const struct dev_pm_ops msdc_dev_pm_ops = {

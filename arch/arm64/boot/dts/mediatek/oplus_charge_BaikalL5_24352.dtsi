@@ -322,6 +322,12 @@
 	charging_host_charger_current = <1500000>;
 	ta_ac_charger_current = <1500000>;
 	pd_charger_current = <500000>;
+	support_icl_optimization;
+	support_chg_time_cnt;
+	support_chg_time_r;
+	support_chg_track_r;
+	chg_time_uvlo = <2700>;
+	chg_time_vmax = <4400>;
 };
 
 &soc {
@@ -634,6 +640,7 @@
 					OPLUS_IC_FUNC_CP_WATCHDOG_RESET
 					OPLUS_IC_FUNC_CP_SET_UCP_DISABLE
 					OPLUS_IC_FUNC_CP_GET_IIN_MAX
+					OPLUS_IC_FUNC_CP_SET_SSTIMEOUT_UCP_ENABLE
 				>;
 				virqs = <
 					OPLUS_IC_VIRQ_ERR
@@ -737,6 +744,9 @@
 		oplus,voocphy_ic = <&oplus_virtual_vphy>;
 		oplus,gauge_ic = <&oplus_virtual_gauge>;
 		oplus,topic-update-interval = <10000>;
+		oplus,fcl_support;
+		oplus,fcl_index = <1>;
+		oplus,vb_offset = <0>;
 		oplus,support_subboard_ntc;
 		oplus_virtual_gauge: oplus,virtual_gauge {
 			compatible = "oplus,virtual_gauge";
@@ -824,7 +834,7 @@
 		oplus_spec,non-standard-hw-fv-inc-mv = <18>;
 		oplus_spec,non-standard-sw-over-fv-mv = <3988>;
 		oplus_spec,non-standard-vbatdet-mv = <3680>;
-		oplus_spec,wired-vbatdet-mv = <0 4190 4190 4290 4390 4390 4370 4030 0>;
+		oplus_spec,wired-vbatdet-mv = <0 4190 4290 4390 4390 4390 4370 4030 0>;
 		oplus_spec,fcc-gear-thr-mv = <4180>;
 		oplus_spec,fcc-gear-shake-mv = <400 400 400 300 300 180 180 180 180>;
 		oplus_spec,vbatt-ov-thr-mv = <4600>;
@@ -843,6 +853,11 @@
 						      1360 1360 900>;
 		oplus_spec,vbat_uv_thr_mv = <3300>;
 		oplus_spec,vbat_charging_uv_thr_mv = <3200>;
+
+		oplus_spec,cycle-derating-cc-thr = <100>;
+		oplus_spec,cycle-derating-head-threshold-ibus = <10000 10000 10000
+								 5800 5800 5800 10000>;
+		oplus_spec,cycle-derating-head-derated-ratio = <100 100 100 80 80 80 100>;
 
 		/*If use subboard NTC as battery temp, config it as 20, otherwise 0 */
 		oplus_spec,tbatt_power_off_cali_temp = <0>;
@@ -1166,9 +1181,9 @@
 								 4540 20 0 0 0
 								 4540 15 0 0 0
 								 4550 10 1 0 0>;
-				strategy_temp_little_cool_high = <4150 73 0 0 0
-								 4150 60 0 0 0
-								 4150 50 0 0 0
+				strategy_temp_little_cool_high = <4150 73 0 60 0
+								 4150 60 0 60 0
+								 4150 50 0 360 0
 								 4230 48 0 0 0
 								 4230 45 0 0 0
 								 4230 40 0 0 0
@@ -1205,7 +1220,7 @@
 								 4540 20 0 0 0
 								 4540 15 0 0 0
 								 4550 14 0 0 0
-								 4550 10 1 0 0>;
+								 4516 10 1 0 0>;
 				strategy_temp_warm =		<4120 19 0 0 0
 								 4120 15 0 0 0
 								 4130 10 1 0 0>;
@@ -1272,7 +1287,7 @@
 								 4540 20 0 0 0
 								 4540 15 0 0 0
 								 4550 14 0 0 0
-								 4550 10 1 0 0>;
+								 4516 10 1 0 0>;
 				strategy_temp_warm =		<4120 19 0 0 0
 								 4120 15 0 0 0
 								 4130 10 1 0 0>;
@@ -1329,7 +1344,7 @@
 								 4540 20 0 0 0
 								 4540 15 0 0 0
 								 4550 14 0 0 0
-								 4550 10 1 0 0>;
+								 4516 10 1 0 0>;
 				strategy_temp_warm =		<4120 19 0 0 0
 								 4120 15 0 0 0
 								 4130 10 1 0 0>;
@@ -1355,7 +1370,7 @@
 								 4540 20 0 0 0
 								 4540 15 0 0 0
 								 4550 14 0 0 0
-								 4550 10 1 0 0>;
+								 4516 10 1 0 0>;
 				strategy_temp_warm =		<4130 10 1 0 0>;//no fastcharge
 			};
 
@@ -1374,7 +1389,7 @@
 								 4540 20 0 0 0
 								 4540 15 0 0 0
 								 4550 14 0 0 0
-								 4550 10 1 0 0>;
+								 4516 10 1 0 0>;
 				strategy_temp_warm =		<4130 10 1 0 0>;//no fastcharge
 			};
 
@@ -1386,7 +1401,7 @@
 				strategy_temp_normal_low =	<4550 10 1 0 0>;
 				strategy_temp_normal_high =	<4540 15 0 0 0
 								 4550 14 0 0 0
-								 4550 10 1 0 0>;
+								 4516 10 1 0 0>;
 				strategy_temp_warm =		<4130 10 1 0 0>;//no fastcharge
 			};
 		};
@@ -1427,7 +1442,7 @@
 								 4540 40 0 0 0
 								 4540 30 0 0 0
 								 4550 28 0 0 0
-								 4550 20 1 0 0>;
+								 4516 20 1 0 0>;
 				strategy_temp_warm =		<4120 38 0 0 0
 								 4120 30 0 0 0
 								 4130 20 1 0 0>;
@@ -1468,7 +1483,7 @@
 								 4540 40 0 0 0
 								 4540 30 0 0 0
 								 4550 28 0 0 0
-								 4550 20 1 0 0>;
+								 4516 20 1 0 0>;
 				strategy_temp_warm =		<4120 38 0 0 0
 								 4120 30 0 0 0
 								 4130 20 1 0 0>;
@@ -1507,7 +1522,7 @@
 								 4540 40 0 0 0
 								 4540 30 0 0 0
 								 4550 28 0 0 0
-								 4550 20 0 0 0>;
+								 4516 20 1 0 0>;
 				strategy_temp_warm =		<4120 38 0 0 0
 								 4120 30 0 0 0
 								 4130 20 1 0 0>;
@@ -1534,7 +1549,7 @@
 								 4540 40 0 0 0
 								 4540 30 0 0 0
 								 4550 28 0 0 0
-								 4550 20 1 0 0>;
+								 4516 20 1 0 0>;
 				strategy_temp_warm =		<4130 20 1 0 0>;//no fastcharge
 			};
 
@@ -1553,7 +1568,7 @@
 								 4540 40 0 0 0
 								 4540 30 0 0 0
 								 4550 28 0 0 0
-								 4550 20 0 0 0>;
+								 4516 20 1 0 0>;
 				strategy_temp_warm =		<4130 20 1 0 0>;//no fastcharge
 			};
 
@@ -1565,7 +1580,7 @@
 				strategy_temp_normal_low =	<4550 20 1 0 0>;
 				strategy_temp_normal_high =	<4540 30 0 0 0
 								 4550 28 0 0 0
-								 4550 20 1 0 0>;
+								 4516 20 1 0 0>;
 				strategy_temp_warm =		<4130 20 1 0 0>;//no fastcharge
 			};
 		};
